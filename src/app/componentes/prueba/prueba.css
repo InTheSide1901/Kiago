@@ -1,0 +1,4 @@
+/* Ajuste de altura mínima en caso de requerirse */
+:host {
+  display: block;
+}

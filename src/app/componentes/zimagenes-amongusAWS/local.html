@@ -1,0 +1,97 @@
+<div class="p-6 max-w-5xl mx-auto bg-white rounded-lg shadow">
+  <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Locales Registrados</h2>
+
+  <!-- Input para agregar -->
+  <div class="flex gap-2 mb-8 max-w-md mx-auto">
+    <input 
+      type="text" 
+      [(ngModel)]="nuevoNombre" 
+      placeholder="Escribe un nuevo nombre..." 
+      class="border rounded-lg px-4 py-2 flex-grow focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+    <button 
+      (click)="agregar()" 
+      class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-lg transition"
+    >
+      Agregar
+    </button>
+  </div>
+
+  @if (cargando) {
+    <div class="text-center py-8 text-gray-500">
+      <p>Cargando información desde MySQL...</p>
+    </div>
+  } @else if (listaDatos.length === 0) {
+    <div class="text-center py-8 text-gray-500">
+      <p>No hay registros disponibles.</p>
+    </div>
+  } @else {
+    <!-- Grilla de círculos -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      @for (item of listaDatos; track item.id) {
+        <div class="flex flex-col items-center text-center group">
+          
+          <!-- Contenedor Redondo Clickeable para ir al detalle -->
+          <a 
+            [routerLink]="['/local', item.id]" 
+            class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-gray-100 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 bg-gray-100 flex items-center justify-center cursor-pointer mb-3"
+          >
+            <img 
+              [src]="item.imagen_principal || 'assets/placeholder-local.png'" 
+              [alt]="item.nombre" 
+              class="w-full h-full object-cover"
+            />
+          </a>
+
+          <!-- Modo Lectura -->
+          @if (editandoId !== item.id) {
+            <span class="font-semibold text-gray-800 text-sm line-clamp-1 mb-2">
+              {{ item.nombre }}
+            </span>
+
+            <div class="flex gap-1">
+              <button 
+                (click)="activarEdicion($event, item)" 
+                class="bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-2.5 py-1 rounded-md transition"
+              >
+                Editar
+              </button>
+              <button 
+                (click)="eliminar($event, item.id)" 
+                class="bg-red-600 hover:bg-red-700 text-white text-xs px-2.5 py-1 rounded-md transition"
+              >
+                Borrar
+              </button>
+            </div>
+          }
+
+          <!-- Modo Edición Inline -->
+          @if (editandoId === item.id) {
+            <div class="flex flex-col gap-2 w-full max-w-[140px]">
+              <input 
+                type="text" 
+                [(ngModel)]="nombreEditado" 
+                class="border rounded px-2 py-1 text-xs text-center focus:outline-none focus:ring-1 focus:ring-blue-500"
+              />
+              <div class="flex gap-1 justify-center">
+                <button 
+                  (click)="guardarEdicion($event, item.id)" 
+                  class="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 rounded transition"
+                >
+                  Guardar
+                </button>
+                <button 
+                  (click)="cancelarEdicion($event)" 
+                  class="bg-gray-400 hover:bg-gray-500 text-white text-xs px-2 py-1 rounded transition"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          }
+
+        </div>
+      }
+    </div>
+  }
+</div>

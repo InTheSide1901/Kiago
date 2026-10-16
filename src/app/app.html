@@ -1,0 +1,18 @@
+<nav class="flex items-center justify-between p-4 bg-slate-800 text-white">
+  <span routerLink="/inicio/categoria" class="font-bold text-lg">Mi App</span>
+
+  <div>
+    @if (authService.currentUser(); as user) {
+      <div class="flex items-center gap-4">
+        <span class="text-sm">Hola, <strong>{{ user.nombre }}</strong></span>
+        <button (click)="authService.logout()" 
+                class="px-3 py-1 bg-red-500 hover:bg-red-600 text-xs text-white rounded font-medium">
+          Cerrar Sesión
+        </button>
+      </div>
+    } @else {
+      <a routerLink="/login" class="text-sm text-emerald-400 hover:underline">Iniciar Sesión</a>
+    }
+  </div>
+</nav>
+<router-outlet></router-outlet>
