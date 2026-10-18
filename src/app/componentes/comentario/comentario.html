@@ -1,0 +1,179 @@
+<!-- Banner de Advertencia si el usuario ya comentó y no está editando -->
+<div *ngIf="comentarioUsuarioExistente && !modoEdicion"
+  class="max-w-2xl mx-auto mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl flex items-center justify-between gap-4">
+  <div class="flex items-center gap-3 text-amber-800 text-sm">
+    <svg class="w-5 h-5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+    <span>Ya has publicado una opinión en este local. Si deseas cambiarla, puedes editar tu comentario.</span>
+  </div>
+  <button (click)="prepararEdicion(comentarioUsuarioExistente)"
+    class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-medium text-xs rounded-lg transition-colors shrink-0">
+    Editar mi opinión
+  </button>
+</div>
+
+<!-- Formulario para publicar/editar reseña -->
+<div *ngIf="!comentarioUsuarioExistente || modoEdicion"
+  class="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md border border-gray-100">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xl font-semibold text-gray-800">
+      {{ modoEdicion ? 'Editar tu opinión' : 'Dejar una opinión' }}
+    </h3>
+    <button *ngIf="modoEdicion" (click)="cancelarEdicion()" class="text-xs text-gray-500 hover:text-gray-700 underline">
+      Cancelar edición
+    </button>
+  </div>
+
+  <form [formGroup]="comentarioForm" (ngSubmit)="onSubmit()" class="space-y-5">
+
+    <!-- Puntuación -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Puntuación <span class="text-red-500">*</span>
+      </label>
+      <div class="flex items-center space-x-1">
+        <button type="button" *ngFor="let estrella of estrellas" (click)="setRating(estrella)"
+          class="focus:outline-none transition-transform hover:scale-110">
+          <svg class="w-8 h-8 cursor-pointer"
+            [ngClass]="estrella <= comentarioForm.get('calificacion')?.value ? 'text-yellow-400 fill-current' : 'text-gray-300 fill-current'"
+            viewBox="0 0 20 20">
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Texto Comentario -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Comentario</label>
+      <textarea formControlName="contenido" rows="4" placeholder="¿Qué tal fue tu experiencia en este lugar?"
+        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none">
+      </textarea>
+    </div>
+
+    <!-- Subir/Cambiar Foto -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Foto (opcional)</label>
+
+      <div *ngIf="!imagePreview" class="flex items-center justify-center w-full">
+        <label
+          class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+          <div class="flex flex-col items-center justify-center pt-5 pb-6">
+            <svg class="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+              </path>
+            </svg>
+            <p class="text-xs text-gray-500"><span class="font-semibold">Haz clic para subir</span> una imagen</p>
+          </div>
+          <input type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*" />
+        </label>
+      </div>
+
+      <div *ngIf="imagePreview" class="relative inline-block mt-2">
+        <img [src]="imagePreview" alt="Vista previa" class="w-24 h-24 object-cover rounded-lg border border-gray-200">
+        <button type="button" (click)="removeImage()"
+          class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 focus:outline-none shadow">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="flex justify-end gap-3 pt-2">
+      <button *ngIf="modoEdicion" type="button" (click)="cancelarEdicion()"
+        class="px-4 py-2.5 border border-gray-300 text-gray-700 font-medium text-sm rounded-lg hover:bg-gray-50 transition-colors">
+        Cancelar
+      </button>
+      <button type="submit" [disabled]="comentarioForm.invalid || isSubmitting"
+        class="px-6 py-2.5 bg-blue-600 text-white font-medium text-sm rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors shadow-sm">
+        {{ isSubmitting ? 'Guardando...' : (modoEdicion ? 'Guardar cambios' : 'Publicar comentario') }}
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<!-- LISTADO DE RESEÑAS -->
+<div class="max-w-2xl mx-auto mt-10">
+  <h4 class="text-lg font-bold text-slate-800 mb-6">Opiniones de la comunidad</h4>
+
+  @if (cargandoComentarios()) {
+  <div class="space-y-4">
+    <div class="animate-pulse bg-white p-4 rounded-xl shadow-sm border border-slate-100 h-24"></div>
+  </div>
+  } @else if (comentariosList().length === 0) {
+  <div class="text-center py-8 bg-white rounded-xl border border-slate-100 shadow-sm text-slate-500">
+    Aún no hay comentarios para este local. ¡Sé el primero en opinar!
+  </div>
+  } @else {
+  <div class="space-y-4">
+    @for (item of comentariosList(); track item.id) {
+    <div class="p-5 bg-white rounded-xl border border-slate-100 shadow-sm space-y-3">
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center uppercase">
+            {{ item.usuario_nombre ? item.usuario_nombre[0] : 'U' }}
+          </div>
+          <div>
+            <p class="font-semibold text-slate-800 text-sm">
+              {{ item.usuario_nombre }} {{ item.usuario_apellido }}
+            </p>
+            <p class="text-xs text-slate-400">
+              {{ item.created_at | date:'shortDate' }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Estrellas y Acciones (Editar/Eliminar) -->
+        <div class="flex items-center gap-4">
+          <div class="flex items-center text-yellow-400">
+            <svg *ngFor="let estrella of estrellas" class="w-4 h-4"
+              [ngClass]="estrella <= item.puntuacion ? 'fill-current' : 'text-slate-200 fill-current'"
+              viewBox="0 0 20 20">
+              <path
+                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          </div>
+
+          <!-- BOTONES EXCLUSIVOS DEL AUTOR -->
+          <div *ngIf="esMiComentario(item)" class="flex items-center gap-2 border-l border-slate-200 pl-3">
+            <button (click)="prepararEdicion(item)" title="Editar opinión"
+              class="text-slate-400 hover:text-indigo-600 transition-colors p-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+            </button>
+            <button (click)="confirmarEliminacion(item.id)" title="Eliminar opinión"
+              class="text-slate-400 hover:text-red-600 transition-colors p-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p *ngIf="item.comentario" class="text-slate-600 text-sm leading-relaxed">
+        {{ item.comentario }}
+      </p>
+
+      <div *ngIf="item.url_imagen" class="pt-2">
+        <img [src]="item.url_imagen" alt="Foto de la reseña"
+          class="w-32 h-32 object-cover rounded-lg border border-slate-100">
+      </div>
+
+    </div>
+    }
+  </div>
+  }
+</div>

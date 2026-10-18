@@ -1,35 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { ServiceAuth } from '../../service/serviceAuth/service-auth';
-
+import { AuthService } from '../../service/authService/auth-service';
 @Component({
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule,ReactiveFormsModule,RouterLink],
   selector: 'app-login',
   styleUrl: './login.css',
   templateUrl: './login.html',
 })
 export class Login {
-  loginData = {
-    email: '',
-    password_hash: ''
-  };
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  errorMessage = '';
-
-  constructor(private authService: ServiceAuth, private router: Router) {}
+  loginForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
+  });
 
   onSubmit() {
-    this.errorMessage = '';
-    this.authService.login(this.loginData).subscribe({
-      next: () => {
-        // Redirige al dashboard o vista protegida
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        this.errorMessage = err.error?.message || 'Correo o contraseña incorrectos';
-      }
-    });
+    if (this.loginForm.valid) {
+      this.authService.login(this.loginForm.value).subscribe({
+        next: () => this.router.navigate(['/inicio/categoria']),
+        error: (err) => alert(err.error?.message || 'Credenciales inválidas')
+      });
+    }
   }
 }

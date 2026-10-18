@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatosService, MiDato } from '../../service/serviceApp/service';
 
+
 @Component({
   imports: [CommonModule, RouterLink],
   selector: 'app-inicio-categoria-detalle',

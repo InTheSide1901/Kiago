@@ -9,19 +9,20 @@ import { InicioCategoria } from './componentes/inicio-categoria/inicio-categoria
 import { InicioCategoriaDetalle } from './componentes/inicio-categoria-detalle/inicio-categoria-detalle';
 import { Register } from './componentes/register/register';
 import { Login } from './componentes/login/login';
-import { authGuard } from './service/serviceAuth/auth.guard';
+import { Comentario } from './componentes/comentario/comentario';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'register', component: Register },
-  { path: 'inicio', component: Inicio, canActivate: [authGuard]}, // Guard de protección
+  { path: 'inicio', component: Inicio}, // Guard de protección
   { path: 'inicio/categoria', component: InicioCategoria },
 //   { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle },
   { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle }, // Agregada/Ajustada // <--- Esta ruta captura el ID de la URL
   { path: 'prueba', component: Prueba },
   { path: 'local', component: Local },
   { path: 'new', component: New },
+  { path: 'comentario', component: Comentario },
   { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle },
 ];

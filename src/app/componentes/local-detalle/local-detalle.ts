@@ -2,8 +2,10 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatosService } from '../../service/serviceApp/service';
+import { Comentario } from '../comentario/comentario'; // Adjusta la ruta de importación si es necesario
+
 @Component({
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, Comentario], // Agregado Comentario aquí
   selector: 'app-local-detalle',
   styleUrl: './local-detalle.css',
   templateUrl: './local-detalle.html',

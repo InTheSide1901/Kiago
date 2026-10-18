@@ -1,13 +1,15 @@
-import { Component} from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { ServiceAuth } from './service/serviceAuth/service-auth';
+import { Component, inject, OnInit } from '@angular/core';
+
+import { RouterOutlet } from '@angular/router';
+import { Navbar } from './componentes/navbar/navbar';
+
 
 @Component({
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet,Navbar],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
 export class App{
-  constructor(public authService: ServiceAuth) {}
+  
 }

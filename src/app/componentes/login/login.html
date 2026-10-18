@@ -1,33 +1,37 @@
-<div class="max-w-md mx-auto my-10 p-6 bg-white rounded-lg shadow-md font-sans">
-  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Iniciar Sesión</h2>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md space-y-6">
+    <h2 class="text-2xl font-bold text-center text-gray-900">Iniciar Sesión</h2>
 
-  @if (errorMessage) {
-    <div class="mb-4 p-3 bg-red-100 text-red-700 text-sm rounded">
-      {{ errorMessage }}
-    </div>
-  }
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+        <input 
+          type="email" 
+          formControlName="email" 
+          class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="correo@ejemplo.com">
+      </div>
 
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="space-y-4">
-    <div>
-      <label class="block text-xs font-semibold text-gray-600">Correo Electrónico</label>
-      <input type="email" [(ngModel)]="loginData.email" name="email" required 
-             class="w-full p-2 border rounded text-sm focus:outline-emerald-500">
-    </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
+        <input 
+          type="password" 
+          formControlName="password" 
+          class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="••••••••">
+      </div>
 
-    <div>
-      <label class="block text-xs font-semibold text-gray-600">Contraseña</label>
-      <input type="password" [(ngModel)]="loginData.password_hash" name="password_hash" required 
-             class="w-full p-2 border rounded text-sm focus:outline-emerald-500">
-    </div>
+      <button 
+        type="submit" 
+        [disabled]="loginForm.invalid"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md disabled:bg-gray-400 transition">
+        Ingresar
+      </button>
+    </form>
 
-    <button type="submit" [disabled]="!loginForm.form.valid"
-            class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white font-bold rounded shadow transition">
-      Ingresar
-    </button>
-  </form>
-
-  <p class="mt-4 text-xs text-center text-gray-600">
-    ¿No tienes una cuenta? 
-    <a routerLink="/register" class="text-emerald-600 font-semibold hover:underline">Regístrate aquí</a>
-  </p>
+    <p class="text-sm text-center text-gray-600">
+      ¿No tienes una cuenta aún? 
+      <a routerLink="/register" class="text-emerald-600 hover:underline font-semibold">Regístrate</a>
+    </p>
+  </div>
 </div>
