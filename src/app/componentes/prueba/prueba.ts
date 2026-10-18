@@ -33,7 +33,7 @@ function crearLocalIconSmall(): L.DivIcon {
 }
 
 // Función para generar el HTML del Pin Grande con la imagen del local al presionarlo (Activo)
-function crearLocalIconLarge(imagenUrl: string): L.DivIcon {
+export function crearLocalIconLarge(imagenUrl: string): L.DivIcon {
   // Imagen por defecto si viene vacía de MySQL
   const img = imagenUrl || 'https://via.placeholder.com/150';
 
@@ -100,25 +100,25 @@ export class Prueba implements AfterViewInit, OnDestroy {
   }
 
   private initMap(): void {
-  this.map = L.map(this.mapElement.nativeElement).setView([this.latitud, this.longitud], 15);
+    this.map = L.map(this.mapElement.nativeElement).setView([this.latitud, this.longitud], 15);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(this.map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(this.map);
 
-  // ⚡ NUEVO: Evento al hacer clic en cualquier parte del mapa
-  this.map.on('click', (e: L.LeafletMouseEvent) => {
-    // 1. Actualizamos latitud y longitud con las coordenadas del clic
-    this.latitud = e.latlng.lat;
-    this.longitud = e.latlng.lng;
+    // ⚡ NUEVO: Evento al hacer clic en cualquier parte del mapa
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+      // 1. Actualizamos latitud y longitud con las coordenadas del clic
+      this.latitud = e.latlng.lat;
+      this.longitud = e.latlng.lng;
 
-    // 2. Buscamos los locales cercanos desde ese nuevo punto
-    this.buscarLocalesCercanos();
-  });
+      // 2. Buscamos los locales cercanos desde ese nuevo punto
+      this.buscarLocalesCercanos();
+    });
 
-  this.actualizarUbicacionEnMapa();
-}
+    this.actualizarUbicacionEnMapa();
+  }
 
   public solicitarUbicacionInicial(): void {
     this.buscando = true;
@@ -211,80 +211,80 @@ export class Prueba implements AfterViewInit, OnDestroy {
 
   // ⚡ Desplegar/Ocultar el mapa embebido de cada tarjeta ("Ver más")
   public toggleVerMas(local: LocalCercano): void {
-  if (this.localExpandidoId === local.id) {
-    this.localExpandidoId = null;
+    if (this.localExpandidoId === local.id) {
+      this.localExpandidoId = null;
+      if (this.miniMap) {
+        this.miniMap.remove();
+        this.miniMap = undefined;
+      }
+    } else {
+      this.localExpandidoId = local.id;
+      // Esperamos a que Angular renderice el contenedor del mini-mapa en el DOM
+      setTimeout(() => {
+        this.inicializarMiniMapa(local);
+      }, 150);
+    }
+  }
+
+  private inicializarMiniMapa(local: LocalCercano): void {
+    const containerId = `mini-map-${local.id}`;
+    const element = document.getElementById(containerId);
+    if (!element) return;
+
     if (this.miniMap) {
       this.miniMap.remove();
       this.miniMap = undefined;
     }
-  } else {
-    this.localExpandidoId = local.id;
-    // Esperamos a que Angular renderice el contenedor del mini-mapa en el DOM
-    setTimeout(() => {
-      this.inicializarMiniMapa(local);
-    }, 150);
-  }
-}
 
-  private inicializarMiniMapa(local: LocalCercano): void {
-  const containerId = `mini-map-${local.id}`;
-  const element = document.getElementById(containerId);
-  if (!element) return;
+    // 1. Convertir explicitamente las coordenadas a número por si vienen como string o undefined de MySQL
+    const localLat = Number(local.latitud);
+    const localLng = Number(local.longitud);
+    const userLat = Number(this.latitud);
+    const userLng = Number(this.longitud);
 
-  if (this.miniMap) {
-    this.miniMap.remove();
-    this.miniMap = undefined;
-  }
-
-  // 1. Convertir explicitamente las coordenadas a número por si vienen como string o undefined de MySQL
-  const localLat = Number(local.latitud);
-  const localLng = Number(local.longitud);
-  const userLat = Number(this.latitud);
-  const userLng = Number(this.longitud);
-
-  // Validación para evitar el error "Invalid LatLng object: (NaN, NaN)"
-  if (isNaN(localLat) || isNaN(localLng) || isNaN(userLat) || isNaN(userLng)) {
-    console.error('Coordenadas inválidas para el mini mapa:', { localLat, localLng, userLat, userLng });
-    return;
-  }
-
-  // Punto medio entre el usuario y el local
-  const midLat = (userLat + localLat) / 2;
-  const midLng = (userLng + localLng) / 2;
-
-  // 2. Inicializar el mini-mapa
-  this.miniMap = L.map(containerId, { zoomControl: false }).setView([midLat, midLng], 14);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
-  }).addTo(this.miniMap);
-
-  // Marcador del usuario
-  L.marker([userLat, userLng], { icon: userIcon }).addTo(this.miniMap);
-
-  // Marcador del local
-  const imagen = local.imagen_principal || '';
-  L.marker([localLat, localLng], {
-    icon: crearLocalIconLarge(imagen)
-  }).addTo(this.miniMap);
-
-  // Ajustar encuadre para ver ambos puntos
-  const bounds = L.latLngBounds([
-    [userLat, userLng],
-    [localLat, localLng]
-  ]);
-  this.miniMap.fitBounds(bounds, { padding: [30, 30] });
-
-  // 3. Forzar a Leaflet a recalcular el tamaño del contenedor recién renderizado
-  setTimeout(() => {
-    if (this.miniMap) {
-      this.miniMap.invalidateSize();
+    // Validación para evitar el error "Invalid LatLng object: (NaN, NaN)"
+    if (isNaN(localLat) || isNaN(localLng) || isNaN(userLat) || isNaN(userLng)) {
+      console.error('Coordenadas inválidas para el mini mapa:', { localLat, localLng, userLat, userLng });
+      return;
     }
-  }, 100);
-}
 
-  
+    // Punto medio entre el usuario y el local
+    const midLat = (userLat + localLat) / 2;
+    const midLng = (userLng + localLng) / 2;
+
+    // 2. Inicializar el mini-mapa
+    this.miniMap = L.map(containerId, { zoomControl: false }).setView([midLat, midLng], 14);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(this.miniMap);
+
+    // Marcador del usuario
+    L.marker([userLat, userLng], { icon: userIcon }).addTo(this.miniMap);
+
+    // Marcador del local
+    const imagen = local.imagen_principal || '';
+    L.marker([localLat, localLng], {
+      icon: crearLocalIconLarge(imagen)
+    }).addTo(this.miniMap);
+
+    // Ajustar encuadre para ver ambos puntos
+    const bounds = L.latLngBounds([
+      [userLat, userLng],
+      [localLat, localLng]
+    ]);
+    this.miniMap.fitBounds(bounds, { padding: [30, 30] });
+
+    // 3. Forzar a Leaflet a recalcular el tamaño del contenedor recién renderizado
+    setTimeout(() => {
+      if (this.miniMap) {
+        this.miniMap.invalidateSize();
+      }
+    }, 100);
+  }
+
+
 
   private actualizarUbicacionEnMapa(): void {
     const coords: L.LatLngExpression = [this.latitud, this.longitud];

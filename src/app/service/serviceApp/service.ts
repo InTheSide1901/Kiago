@@ -34,6 +34,23 @@ export interface LocalCercano {
   promedio_calificacion?: number;
 }
 
+/*
+export interface Favorito {
+  id: number;
+  local_id?: number;
+}
+
+export interface LocalFavorito {
+  id: number;
+  categoria_id?: number;
+  nombre: string;
+  imagen_principal?: string;
+  distancia_km: number;
+  distancia_metros: number;
+  promedio_calificacion?: number;
+}
+*/
+
 @Injectable({
   providedIn: 'root'
 })

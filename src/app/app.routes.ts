@@ -10,6 +10,7 @@ import { InicioCategoriaDetalle } from './componentes/inicio-categoria-detalle/i
 import { Register } from './componentes/register/register';
 import { Login } from './componentes/login/login';
 import { authGuard } from './service/serviceAuth/auth.guard';
+import { Favoritos } from './componentes/favoritos/favoritos';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
@@ -24,4 +25,5 @@ export const routes: Routes = [
   { path: 'local', component: Local },
   { path: 'new', component: New },
   { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle },
+  { path: 'favoritos', component: Favoritos}
 ];
