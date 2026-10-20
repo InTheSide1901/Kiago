@@ -1,57 +1,32 @@
-<p>favoritos works!</p>
-
-
-<div 
-    *ngFor="let local of locales" 
+<div *ngFor="let local of localesFav"
     class="bg-gray-200/80 hover:bg-gray-200 rounded-2xl p-3 shadow-sm border border-gray-300/50 transition-all">
-
     <!-- Fila superior de la tarjeta -->
     <div class="flex items-center justify-between gap-3">
 
         <!-- Imagen principal (Click -> Navega al Detalle) -->
-        <a 
-        [routerLink]="['/inicio/categoria', local.categoria_id || 1, 'detalle', local.id]"
-        class="w-20 h-16 sm:w-24 sm:h-20 rounded-xl overflow-hidden bg-gray-300 shrink-0 border border-white shadow-xs block">
-        <img 
-            [src]="local.imagen_principal || 'assets/placeholder.jpg'" 
-            [alt]="local.nombre" 
-            class="w-full h-full object-cover hover:scale-105 transition-transform duration-200" 
-        />
+        <a [routerLink]="['/inicio/categoria', local.categoria_id || 1, 'detalle', local.id]"
+            class="w-20 h-16 sm:w-24 sm:h-20 rounded-xl overflow-hidden bg-gray-300 shrink-0 border border-white shadow-xs block">
+            <img [src]="local.imagen_principal || 'assets/placeholder.jpg'" [alt]="local.nombre"
+                class="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
         </a>
 
         <!-- Información central (Click en Título -> Navega al Detalle) -->
         <div class="flex-1 min-w-0 space-y-1">
-        <a 
-            [routerLink]="['/inicio/categoria', local.categoria_id || 1, 'detalle', local.id]"
-            class="font-bold text-gray-900 text-sm sm:text-base leading-tight hover:text-emerald-700 line-clamp-2 block">
-            {{ local.nombre }}
-        </a>
+            <a [routerLink]="['/inicio/categoria', local.categoria_id || 1, 'detalle', local.id]"
+                class="font-bold text-gray-900 text-sm sm:text-base leading-tight hover:text-emerald-700 line-clamp-2 block">
+                {{ local.nombre }}
+            </a>
 
-        <div class="flex items-center gap-3 text-xs text-gray-700 font-medium pt-1">
-            <!-- Calificación Promedio -->
-            <span class="flex items-center gap-1 text-amber-600 font-semibold">
-            ★ {{ local.promedio_calificacion ? (local.promedio_calificacion | number:'1.1-1') : '4.8' }}
-            </span>
+            <div class="flex items-center gap-3 text-xs text-gray-700 font-medium pt-1">
 
-            <!-- Distancia -->
-            <span class="flex items-center gap-0.5 text-gray-600">
-            📍 {{ local.distancia_km ? (local.distancia_km | number:'1.1-1') : (local.distancia_metros / 1000 | number:'1.1-1') }}km
-            </span>
-        </div>
+            </div>
         </div>
 
-        <!-- Botón "Ver más" (Despliega el mini-mapa) -->
-        <button 
-        (click)="toggleVerMas(local)" 
-        class="px-4 py-1.5 border border-gray-800 text-gray-900 hover:bg-gray-800 hover:text-white rounded-full text-xs font-semibold transition-colors shrink-0">
-        {{ localExpandidoId === local.id ? 'Ocultar' : 'Ver más' }}
-        </button>
+
     </div>
 
     <!-- Mapa desplegable embebido ("Ver más") -->
-    <div 
-        *ngIf="localExpandidoId === local.id" 
-        class="mt-3 pt-2 border-t border-gray-300 animate-fadeIn">
+    <div *ngIf="localExpandidoId === local.id" class="mt-3 pt-2 border-t border-gray-300 animate-fadeIn">
         <div [id]="'mini-map-' + local.id" class="w-full h-72 rounded-xl shadow-inner border border-gray-300 z-0"></div>
     </div>
 </div>

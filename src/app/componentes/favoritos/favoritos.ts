@@ -5,7 +5,8 @@ import { RouterLink, Router } from '@angular/router';
 import * as L from 'leaflet';
 
 import { Buscador } from '../../herramientas/buscador/buscador'
-import { LocalCercano, LocalesService } from '../../service/serviceApp/service';
+import { LocalCercano, LocalFavorito } from '../../service/serviceApp/service';
+import { DatosService } from '../../service/serviceApp/service';
 
 import {crearLocalIconLarge} from '../prueba/prueba';
 
@@ -27,12 +28,16 @@ const userIcon = L.icon({
 })
 export class Favoritos {
   private router = inject(Router);
+  private datosService = inject(DatosService);
+  private cdr = inject(ChangeDetectorRef);
 
+  public userId = Number(localStorage.getItem('id'));
+  public localesFav: LocalFavorito[] = [];
+
+  
   // Coordenadas predeterminadas (por si el usuario deniega la geolocalización)
   public latitud: number = -34.6037;
   public longitud: number = -58.3816;
-
-  public locales: LocalCercano[] = [];
 
   // Mapa individual expandido por tarjeta ("Ver más")
   public localExpandidoId: number | null = null;
@@ -44,11 +49,20 @@ export class Favoritos {
   }
 
   private buscarFavoritos(): void {
+    this.datosService.favoritosPorUsuario(this.userId).subscribe({
+      next: (locales) => {
+        this.localesFav = [...locales.favoritos];
+        this.cdr.detectChanges();
 
+        console.log('Favoritos obtenidos:', this.localesFav);
+      },
+      error: (error) => {
+        console.error('Error al buscar favoritos:', error);
+      }
+    });
   }
 
-
-
+  /*
   // ⚡ Desplegar/Ocultar el mapa embebido de cada tarjeta ("Ver más")
   public toggleVerMas(local: LocalCercano): void {
     if (this.localExpandidoId === local.id) {
@@ -123,5 +137,5 @@ export class Favoritos {
       }
     }, 100);
   }
-
+  */
 }

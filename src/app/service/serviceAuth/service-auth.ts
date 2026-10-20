@@ -46,6 +46,7 @@ export class ServiceAuth {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
     localStorage.removeItem('usuario');
     this.currentUser.set(null);
     this.router.navigate(['/login']);
@@ -57,6 +58,7 @@ export class ServiceAuth {
 
   private guardarSesion(res: AuthResponse): void {
     localStorage.setItem('token', res.token);
+    localStorage.setItem('id', JSON.stringify(res.usuario.id));
     localStorage.setItem('usuario', JSON.stringify(res.usuario));
     this.currentUser.set(res.usuario);
   }
