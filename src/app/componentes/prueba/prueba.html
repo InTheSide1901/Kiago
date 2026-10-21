@@ -1,118 +1,129 @@
-<div class="max-w-2xl mx-auto p-4 space-y-6 font-sans">
+<div class="max-w-7xl mx-auto px-4 py-8 font-sans">
 
-  <!-- Encabezado con opción de re-ubicación -->
-  <div class="flex items-center justify-between">
-    <h1 class="text-xl font-bold text-gray-800">
-      Búsqueda de Locales Cercanos
-    </h1>
-    <button (click)="solicitarUbicacionInicial()"
-      class="flex items-center gap-1.5 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold py-1.5 px-3 rounded-full border border-emerald-200 transition">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      Mi ubicación GPS
-    </button>
-  </div>
-
-  <!-- Controles Simplificados (Solo Margen + Tip para hacer clic en el mapa) -->
-  <div
-    class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-    <div class="flex items-center gap-2 w-full sm:w-auto">
-      <label class="font-medium text-xs text-gray-600 whitespace-nowrap">Margen (Metros):</label>
-      <input type="number" [(ngModel)]="radioMetros" (change)="buscarLocalesCercanos()"
-        class="w-28 rounded-lg border-gray-300 border p-2 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" />
-    </div>
-
-    <p class="text-xs text-gray-500 text-center sm:text-left">
-      💡 <span class="font-semibold text-gray-700">Tip:</span> Haz clic en cualquier parte del mapa para cambiar tu
-      ubicación de búsqueda.
-    </p>
-
-    <button (click)="buscarLocalesCercanos()"
-      class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold py-2 px-4 rounded-lg shadow-sm transition">
-      Buscar
-    </button>
-  </div>
-
-  <!-- Mapa General -->
-  <div class="w-full h-96 rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative z-0">
-    <div #mapContainer class="w-full h-full"></div>
-  </div>
-
-  <!-- SECCIÓN: RESULTADOS CERCA DE TI -->
-  <div class="space-y-4 pt-2">
-    <h2 class="text-lg font-bold tracking-wider text-gray-800 uppercase text-center sm:text-left">
-      RESULTADOS CERCA DE TI
-    </h2>
-
-    <!-- State 1: Cargando -->
-    <div *ngIf="buscando" class="flex flex-col items-center justify-center py-8 text-gray-500">
-      <div class="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-      <p class="mt-2 text-sm">Buscando locales cercanos...</p>
-    </div>
-
-    <!-- State 2: No se encontraron locales -->
-    <div *ngIf="!buscando && busquedaRealizada && locales.length === 0"
-      class="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-8 text-center space-y-2">
-      <div class="text-3xl">📍</div>
-      <h3 class="font-semibold text-gray-700">No hay ningún local cerca de tu alcance</h3>
-      <p class="text-xs text-gray-500 max-w-sm mx-auto">
-        Prueba a incrementar el margen de metros o cambiar la ubicación seleccionada haciendo clic en el mapa.
+  <!-- PANEL DE CONTROLES SUPERIOR (Mantiene todas tus funciones) -->
+  <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-gray-200 mb-8 flex flex-col lg:flex-row items-center justify-between gap-4">
+    
+    <!-- Margen y Tip -->
+    <div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+      <div class="flex items-center gap-3 bg-gray-50 px-4 py-2 rounded-xl border border-gray-200 w-full sm:w-auto">
+        <label class="font-semibold text-sm text-gray-700 whitespace-nowrap">Radio (Metros):</label>
+        <input type="number" [(ngModel)]="radioMetros" (change)="buscarLocalesCercanos()"
+          class="w-24 bg-transparent border-b-2 border-gray-300 focus:border-[#2d5a27] p-1 text-sm font-medium focus:outline-none text-center transition-colors" />
+      </div>
+      <p class="text-xs text-gray-500 text-center sm:text-left flex-1">
+        💡 <span class="font-semibold text-gray-700">Tip:</span> Haz clic en cualquier parte del mapa para cambiar tu ubicación de búsqueda.
       </p>
     </div>
 
-    <!-- State 3: Lista de Tarjetas -->
-    <div *ngIf="!buscando && locales.length > 0" class="space-y-3">
-      <div *ngFor="let local of locales"
-        class="bg-gray-200/80 hover:bg-gray-200 rounded-2xl p-3 shadow-sm border border-gray-300/50 transition-all">
+    <!-- Botones de Acción -->
+    <div class="flex items-center gap-3 w-full lg:w-auto justify-center sm:justify-end shrink-0">
+      <button (click)="solicitarUbicacionInicial()"
+        class="flex items-center gap-2 text-sm bg-green-50 hover:bg-green-100 text-green-800 font-semibold py-2.5 px-4 rounded-xl border border-green-200 transition-colors">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        Mi ubicación
+      </button>
+      
+      <button (click)="buscarLocalesCercanos()"
+        class="bg-[#2d5a27] hover:bg-[#1f401b] text-white text-sm font-semibold py-2.5 px-6 rounded-xl shadow-sm transition-colors">
+        Buscar
+      </button>
+    </div>
+  </div>
 
-        <!-- Fila superior de la tarjeta -->
-        <div class="flex items-center justify-between gap-3">
+  <!-- CONTENEDOR PRINCIPAL: DOS COLUMNAS -->
+  <div class="flex flex-col lg:flex-row gap-8">
 
-          <!-- Imagen principal (Click -> Navega al Detalle) -->
-          <a [routerLink]="['/inicio/categoria', local.categoria_id || 1, 'detalle', local.id]"
-            class="w-20 h-16 sm:w-24 sm:h-20 rounded-xl overflow-hidden bg-gray-300 shrink-0 border border-white shadow-xs block">
-            <img [src]="local.imagen_principal || 'assets/placeholder.jpg'" [alt]="local.nombre"
-              class="w-full h-full object-cover hover:scale-105 transition-transform duration-200" />
-          </a>
+    <!-- COLUMNA IZQUIERDA: Resultados Cerca de Ti -->
+    <div class="w-full lg:w-1/3 flex flex-col space-y-4">
+      
+      <div class="flex items-center justify-between pb-2 border-b border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
+          Resultados cerca de ti
+        </h2>
+        <span *ngIf="locales.length > 0" class="text-xs font-bold text-green-800 bg-green-50 px-2.5 py-1 rounded-md">
+          {{ locales.length }} sugeridos
+        </span>
+      </div>
 
-          <!-- Información central (Click en Título -> Navega al Detalle) -->
-          <div class="flex-1 min-w-0 space-y-1">
+      <!-- State 1: Cargando -->
+      <div *ngIf="buscando" class="flex flex-col items-center justify-center py-12 text-gray-500 bg-gray-50 rounded-2xl border border-gray-100">
+        <div class="w-8 h-8 border-4 border-[#2d5a27] border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-3 text-sm font-medium">Buscando lugares increíbles...</p>
+      </div>
+
+      <!-- State 2: No se encontraron locales -->
+      <div *ngIf="!buscando && busquedaRealizada && locales.length === 0"
+        class="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center space-y-3">
+        <div class="text-4xl">🗺️</div>
+        <h3 class="font-bold text-gray-800">Sin resultados cercanos</h3>
+        <p class="text-sm text-gray-500 max-w-sm mx-auto">
+          Prueba a incrementar el margen de metros o selecciona otra zona en el mapa.
+        </p>
+      </div>
+
+      <!-- State 3: Lista de Tarjetas (Con Scroll interno si hay muchas) -->
+      <div *ngIf="!buscando && locales.length > 0" class="flex flex-col space-y-4 overflow-y-auto max-h-[650px] pr-1">
+        <div *ngFor="let local of locales"
+          class="bg-white hover:border-[#2d5a27] rounded-2xl p-3 shadow-sm border border-gray-200 transition-all group">
+
+          <!-- Fila superior de la tarjeta -->
+          <div class="flex items-center justify-between gap-4">
+
+            <!-- Imagen principal -->
             <a [routerLink]="['/inicio/categoria', local.categoria_id || 1, 'detalle', local.id]"
-              class="font-bold text-gray-900 text-sm sm:text-base leading-tight hover:text-emerald-700 line-clamp-2 block">
-              {{ local.nombre }}
+              class="w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gray-100 shrink-0 block">
+              <img [src]="local.imagen_principal || 'assets/placeholder.jpg'" [alt]="local.nombre"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
             </a>
 
-            <div class="flex items-center gap-3 text-xs text-gray-700 font-medium pt-1">
-              <!-- Calificación Promedio -->
-              <span class="flex items-center gap-1 text-amber-600 font-semibold">
-                ★ {{ local.promedio_calificacion && local.promedio_calificacion > 0 ? (local.promedio_calificacion |
-                number:'1.1-1') : 'Sin opiniones' }}
-              </span>
+            <!-- Información central -->
+            <div class="flex-1 min-w-0 flex flex-col justify-center space-y-1.5">
+              <a [routerLink]="['/inicio/categoria', local.categoria_id || 1, 'detalle', local.id]"
+                class="font-bold text-gray-900 text-base leading-tight hover:text-[#2d5a27] line-clamp-2 block transition-colors">
+                {{ local.nombre }}
+              </a>
 
-              <!-- Distancia -->
-              <span class="flex items-center gap-0.5 text-gray-600">
-                📍 {{ local.distancia_km ? (local.distancia_km | number:'1.1-1') : (local.distancia_metros / 1000 |
-                number:'1.1-1') }}km
-              </span>
+              <div class="flex items-center gap-2 text-sm text-gray-600 font-medium">
+                <!-- Calificación Promedio -->
+                <span class="flex items-center gap-1">
+                  <span class="text-amber-500 text-xs">★</span>
+                  <span class="text-gray-800">{{ local.promedio_calificacion && local.promedio_calificacion > 0 ? (local.promedio_calificacion | number:'1.1-1') : 'N/A' }}</span>
+                </span>
+                <span class="text-gray-300">•</span>
+                <!-- Distancia -->
+                <span class="flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  {{ local.distancia_km ? (local.distancia_km | number:'1.1-1') : (local.distancia_metros / 1000 | number:'1.1-1') }} km
+                </span>
+              </div>
+            </div>
+
+            <!-- Botón "Ver más" que despliega el mapa interior -->
+            <button (click)="toggleVerMas(local)"
+              [ngClass]="{'bg-[#2d5a27] text-white': localExpandidoId !== local.id, 'bg-gray-800 text-white': localExpandidoId === local.id}"
+              class="px-4 py-2 rounded-xl text-sm font-semibold transition-colors shrink-0">
+              {{ localExpandidoId === local.id ? 'Ocultar' : 'Ver más' }}
+            </button>
+          </div>
+
+          <!-- Mapa desplegable embebido (Funcionalidad original) -->
+          <div *ngIf="localExpandidoId === local.id" class="mt-4 pt-4 border-t border-gray-100 animate-fadeIn">
+            <div [id]="'mini-map-' + local.id" class="w-full h-64 rounded-xl shadow-inner border border-gray-200 z-0 bg-gray-50">
             </div>
           </div>
 
-          <!-- Botón "Ver más" (Despliega el mini-mapa) -->
-          <button (click)="toggleVerMas(local)"
-            class="px-4 py-1.5 border border-gray-800 text-gray-900 hover:bg-gray-800 hover:text-white rounded-full text-xs font-semibold transition-colors shrink-0">
-            {{ localExpandidoId === local.id ? 'Ocultar' : 'Ver más' }}
-          </button>
         </div>
+      </div>
+    </div>
 
-        <!-- Mapa desplegable embebido ("Ver más") -->
-        <div *ngIf="localExpandidoId === local.id" class="mt-3 pt-2 border-t border-gray-300 animate-fadeIn">
-          <div [id]="'mini-map-' + local.id" class="w-full h-72 rounded-xl shadow-inner border border-gray-300 z-0">
-          </div>
-        </div>
-
+    <!-- COLUMNA DERECHA: Mapa General -->
+    <div class="w-full lg:w-2/3">
+      <!-- El mapa general ocupa toda la altura disponible al lado de los resultados -->
+      <div class="w-full h-[500px] lg:h-[650px] rounded-3xl shadow-sm border border-gray-200 overflow-hidden relative z-0 sticky top-4">
+        <div #mapContainer class="w-full h-full bg-green-50/50"></div>
       </div>
     </div>
 

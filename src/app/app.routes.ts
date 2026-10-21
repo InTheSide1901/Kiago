@@ -10,12 +10,16 @@ import { InicioCategoriaDetalle } from './componentes/inicio-categoria-detalle/i
 import { Register } from './componentes/register/register';
 import { Login } from './componentes/login/login';
 import { Comentario } from './componentes/comentario/comentario';
+import { ServiceSolicitudLocal } from './service/serviceSolicitudLocal/service-solicitud-local';
+import { SolicitudLocal } from './componentes/solicitud-local/solicitud-local';
+import {InicioAdmin} from './administrador/inicio/inicio'
+import { Favoritos } from './componentes/favoritos/favoritos';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
-  { path: 'register', component: Register },
+  { path: 'favoritos', component: Favoritos },
   { path: 'inicio', component: Inicio}, // Guard de protección
   { path: 'inicio/categoria', component: InicioCategoria },
 //   { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle },
@@ -25,4 +29,5 @@ export const routes: Routes = [
   { path: 'new', component: New },
   { path: 'comentario', component: Comentario },
   { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle },
+  { path: 'solicitud', component: SolicitudLocal },
 ];

@@ -14,6 +14,24 @@ export interface MiDato {
   nombre: string;
   imagen_principal: string;
 }
+export interface SolicitudLocal {
+  id: number;
+  usuario_id: number;
+  categoria_id: number;
+  nombre: string;
+  descripcion: string;
+  telefono: string;
+  correo_electronico: string;
+  sitio_web?: string;
+  calle: string;
+  altura: number;
+  latitud: number;
+  longitud: number;
+  ciudad_id: number;
+  estado: 'pendiente' | 'aprobado' | 'rechazado';
+  motivo_rechazo?: string;
+  created_at: string;
+}
 
 export interface LocalCercano {
   id: number;
@@ -33,6 +51,13 @@ export interface LocalCercano {
   distancia_km: number;
   distancia_metros: number;
   promedio_calificacion?: number;
+}
+export interface LocalFavorito {
+  id: number;
+  usuario_id: number;
+  categoria_id?: number;
+  nombre: string;
+  imagen_principal?: string;
 }
 
 @Injectable({
@@ -92,4 +117,29 @@ export class DatosService {
       params: { q: termino }
     });
   }
+  // ------------------favoritos------------------------
+   agregarFavorito(userId: number, localId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/favoritosAgregar`, { user_id: userId, local_id: localId });
+  }
+
+  eliminarFavorito(userId: number, localId: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/favoritosEliminar`, {
+      body: { user_id: userId.toString(), local_id: localId.toString() }
+    });
+  }
+
+  consultarFavorito( userId: number, localId: number): Observable<{ esFavorito: boolean }> {
+    return this.http.get<{ esFavorito: boolean }>(
+      `${this.apiUrl}/favoritos/${userId}/${localId}`
+    );
+  }
+
+  favoritosPorUsuario(userId: number): Observable<{ favoritos: LocalFavorito[]}> {
+    console.log('Consultando los favoritos del siguiente userId:', userId);
+    return this.http.get<{ favoritos: LocalFavorito[]}>(`${this.apiUrl}/favoritos/${userId}`);
+  }
+
+  
+
+
 }
