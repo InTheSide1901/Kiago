@@ -1,52 +1,57 @@
-<section class="max-w-7xl mx-auto px-4 py-12">
+<section class="max-w-7xl mx-auto px-4 pt-12 pb-16">
   
-  <!-- Encabezado de la Sección (Centrado y minimalista como en la imagen) -->
-  <div class="text-center mb-8">
-    <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
-      ¿Dónde vamos?
-    </h2>
-    <p class="text-base text-slate-500 max-w-2xl mx-auto">
-      Descubre rincones inolvidables, monumentos históricos y la mejor gastronomía a tu alrededor.
+  <!-- 1. Título y Subtítulo (Diseño actualizado) -->
+  <div class="w-full max-w-3xl mx-auto flex flex-col items-center justify-center text-center mb-12">
+    <h1 class="font-extrabold text-4xl sm:text-6xl text-slate-900 tracking-tight mb-4">
+      ¿A dónde vamos?
+    </h1>
+    <p class="text-lg sm:text-xl text-slate-600 font-medium max-w-2xl">
+      Descubre rincones inolvidables, monumentos históricos y la mejor gastronomía de tu zona.
     </p>
   </div>
 
-  <!-- Buscador posicionado entre el título y las categorías -->
-  <div class="flex justify-center mb-12">
-    <!-- El componente app-buscador que ya estilizamos antes -->
-    <app-buscador class="w-full max-w-2xl"></app-buscador>
+  <!-- 2. Buscador (Usa tu propio componente) -->
+  <div class="flex justify-center mb-16">
+    <app-buscador class="w-full max-w-3xl"></app-buscador>
   </div>
 
-  <!-- Estado de Carga (Skeleton loader adaptado a círculos) -->
+  <!-- 3. Estado de Carga y Categorías -->
   @if (cargando()) {
-    <div class="flex flex-wrap justify-center gap-8 sm:gap-12">
+    <!-- Skeleton loader adaptado a los nuevos tamaños -->
+    <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-16 px-4">
       @for (item of [1,2,3,4,5]; track $index) {
-        <div class="flex flex-col items-center gap-3 animate-pulse">
-          <div class="w-20 h-20 sm:w-24 sm:h-24 bg-slate-200 rounded-full shadow-sm"></div>
-          <div class="h-4 bg-slate-200 rounded w-16"></div>
+        <div class="flex flex-col items-center gap-4 animate-pulse">
+          <div class="w-20 h-20 sm:w-28 sm:h-28 bg-slate-200 rounded-full shadow-md"></div>
+          <div class="h-4 bg-slate-200 rounded w-20"></div>
         </div>
       }
     </div>
   } @else {
-    <!-- Grid de Categorías (Diseño circular minimalista) -->
-    <div class="flex flex-wrap justify-center gap-6 sm:gap-12">
+    <!-- Grid de Categorías (Diseño interactivo mejorado) -->
+    <div class="flex flex-wrap items-center justify-center gap-8 sm:gap-16 px-4">
       @for (cat of categorias(); track cat.id) {
         <button 
           (click)="seleccionarCategoria(cat.id)"
-          class="group flex flex-col items-center gap-3 cursor-pointer focus:outline-none"
+          class="group flex flex-col items-center cursor-pointer focus:outline-none"
         >
-          <!-- Círculo de Contenedor de Imagen -->
-          <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden shadow-md group-hover:shadow-lg group-hover:-translate-y-1 transition-all duration-300 border-2 border-transparent group-hover:border-[#2d5a27]" [ngClass]="obtenerEstiloPorId(cat.id)">
+          <!-- Círculo de Contenedor con los nuevos efectos (elevación y anillos) -->
+          <div 
+            class="w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-transparent shadow-md transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl ring-4 ring-gray-50 group-hover:ring-green-50/50 relative"
+            [ngClass]="obtenerEstiloPorId(cat.id)"
+          >
+            <!-- Capa oscura superpuesta en hover -->
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 z-10"></div>
+            
             @if (cat.icono) {
-              <!-- object-cover corrige la distorsión de la imagen -->
               <img 
                 [src]="cat.icono" 
                 [alt]="cat.nombre" 
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 relative z-0"
               />
             } @else {
-              <!-- Icono por defecto si la categoría no tiene foto -->
-              <div class="w-full h-full bg-slate-50 flex items-center justify-center">
-                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <!-- Icono por defecto (SVG) con animaciones si no hay foto -->
+              <div class="w-full h-full bg-slate-50 flex items-center justify-center transition-transform duration-500 group-hover:scale-110 relative z-0">
+                <svg class="w-8 h-8 text-slate-400 group-hover:text-[#2d5a27] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
@@ -55,14 +60,16 @@
           </div>
 
           <!-- Nombre de la categoría -->
-          <h3 class="font-semibold text-slate-800 text-sm group-hover:text-[#2d5a27] transition-colors">
+          <span class="mt-4 text-sm sm:text-base font-semibold text-slate-700 group-hover:text-[#2d5a27] transition-colors">
             {{ cat.nombre }}
-          </h3>
+          </span>
         </button>
       }
     </div>
   }
 </section>
 
-<!-- Aquí continuaría tu app-prueba (mapa y resultados) -->
+<!-- Aquí continúa tu mapa y tarjetas de resultados sin modificaciones -->
 <app-prueba></app-prueba>
+
+<app-footer></app-footer>

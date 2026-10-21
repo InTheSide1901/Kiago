@@ -1,0 +1,77 @@
+<nav class="bg-neutral-tertiary sticky w-full z-20 top-0 start-0 border-default">
+  <div class="flex flex-wrap items-center justify-between mx-auto p-4">
+    <!-- Logo -->
+    <a routerLink="/inicio/categoria" class="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer">
+      <img src="/images/LogoSinFondo.png" class="h-20" alt="Logo Kiago" />
+      <span class="self-center text-xl text-heading font-semibold whitespace-nowrap">Kiago</span>
+    </a>
+
+    <!-- Botón Menú Móvil -->
+    <button (click)="toggleMenu()" type="button"
+      class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-body rounded-base md:hidden hover:bg-neutral-secondary-soft hover:text-heading focus:outline-none focus:ring-2 focus:ring-neutral-tertiary"
+      aria-controls="navbar-dropdown" [attr.aria-expanded]="menuOpen">
+      <span class="sr-only">Open main menu</span>
+      <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+        viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14" />
+      </svg>
+    </button>
+
+    <!-- Contenido del Navbar -->
+    <div class="hidden w-full md:block md:w-auto" [class.hidden]="!menuOpen" id="navbar-dropdown">
+      <ul
+        class="flex flex-col items-center font-medium p-4 md:p-0 mt-4 border border-default rounded-base md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0">
+
+        <!-- Enlaces Generales -->
+        <li>
+          <a href="/inicio/categoria"
+            class="block py-2 px-3 text-kiago-principal hover:text-[#417A41] md:bg-transparent md:p-0"
+            aria-current="page">Explorar</a>
+        </li>
+        <li>
+          <a href="/favoritos"
+            class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-[#417A41] md:p-0 md:dark:hover:bg-transparent">Favoritos</a>
+        </li>
+        <li>
+          <a href="/sobreNosotros"
+            class="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-[#417A41] md:p-0 md:dark:hover:bg-transparent">Sobre
+            nosotros</a>
+        </li>
+
+        <!-- ZONA DE AUTENTICACIÓN -->
+        @if (authService.currentUser()) {
+        <li class="flex items-center gap-2">
+          <!-- Perfil Usuario Logueado -->
+          <button type="button" [routerLink]="['/inicio/perfil']"
+            class="flex items-center text-sm bg-neutral-primary rounded-full md:me-0 focus:ring-4 focus:ring-neutral-tertiary gap-2 p-2 hover:bg-kiago-principal cursor-pointer transition-colors">
+            <img class="w-8 h-8 rounded-full" src="/images/Bombonera.jpg" alt="foto del usuario" />
+            <p>{{ authService.currentUser().nombre }}</p>
+          </button>
+
+          <!-- Botón Cerrar Sesión -->
+          <button (click)="onLogout()" type="button"
+            class="w-11 h-11 inline-flex items-center justify-center text-black bg-neutral-primary hover:bg-rose-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-rose-300 cursor-pointer rounded-2xl transition-colors"
+            aria-label="Cerrar sesión" title="Cerrar sesión">
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l3 3m0 0l-3 3m3-3H8.25" />
+            </svg>
+          </button>
+        </li>
+        } @else {
+        <!-- Usuario NO Logueado -->
+        <li class="flex items-center gap-2 mt-2 md:mt-0">
+          <a routerLink="/login" class="text-heading hover:text-[#417A41] text-sm font-medium px-3 py-1.5 transition">
+            Iniciar Sesión
+          </a>
+          <a routerLink="/register"
+            class="bg-[#417A41] hover:bg-[#326132] text-white text-sm font-semibold px-4 py-2 rounded-md transition shadow-sm">
+            Registrarse
+          </a>
+        </li>
+        }
+      </ul>
+    </div>
+  </div>
+</nav>

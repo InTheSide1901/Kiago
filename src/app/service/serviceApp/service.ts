@@ -60,6 +60,8 @@ export interface LocalFavorito {
   imagen_principal?: string;
 }
 
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -74,6 +76,7 @@ export class LocalesService {
   }
 }
 
+
 // ✅ CORRECCIÓN AQUÍ
 @Injectable({
   providedIn: 'root'
@@ -81,7 +84,6 @@ export class LocalesService {
 export class DatosService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:3000/api';
-
 
 
   getDatos(): Observable<any[]> {

@@ -5,9 +5,11 @@ import { Buscador } from '../../herramientas/buscador/buscador'
 // Importa desde la ruta correcta de tu servicio
 import { DatosService, Categoria } from '../../service/serviceApp/service'; 
 import { Prueba } from '../prueba/prueba';
+import {Footer} from '../footer/footer'
+import {Header} from '../header/header'
 
 @Component({
-  imports: [CommonModule, Buscador, Prueba],
+  imports: [CommonModule, Buscador, Prueba, Footer],
   selector: 'app-inicio-categoria',
   styleUrl: './inicio-categoria.css',
   templateUrl: './inicio-categoria.html',

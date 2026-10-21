@@ -1,4 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+@import "flowbite/src/themes/default";
+@import "leaflet/dist/leaflet.css";
 
-@import 'tailwindcss';
-@import 'leaflet/dist/leaflet.css';
+@plugin "flowbite/plugin";
+
+@source "../node_modules/flowbite";
+
+
+/* html, body {
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen;
+} */
+
+/* Paleta de colores */
+
+@theme {
+  --color-kiago-principal: #5cb85c;
+  --color-kiago-hover: #479E47;
+  --color-kiago-fondo-formularios: #c7e2dd;
+  --color-kiago-dark: #0b1329;
+}

@@ -14,6 +14,8 @@ import { ServiceSolicitudLocal } from './service/serviceSolicitudLocal/service-s
 import { SolicitudLocal } from './componentes/solicitud-local/solicitud-local';
 import {InicioAdmin} from './administrador/inicio/inicio'
 import { Favoritos } from './componentes/favoritos/favoritos';
+import { SobreNosotros } from './componentes/sobre-nosotros/sobre-nosotros';
+import { Perfil } from './componentes/perfil/perfil';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
@@ -30,4 +32,6 @@ export const routes: Routes = [
   { path: 'comentario', component: Comentario },
   { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle },
   { path: 'solicitud', component: SolicitudLocal },
+  { path: 'sobreNosotros', component: SobreNosotros },
+  { path: 'inicio/perfil', component: Perfil },
 ];
