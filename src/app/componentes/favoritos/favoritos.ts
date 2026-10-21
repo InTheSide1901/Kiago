@@ -62,6 +62,19 @@ export class Favoritos {
     });
   }
 
+  private eliminar(localId: number): void {
+    this.datosService.eliminarFavorito(this.userId, localId).subscribe({
+      next: () => {
+        console.log(`Favorito con ID ${localId} eliminado correctamente.`);
+        this.localesFav = this.localesFav.filter(local => local.id !== localId);
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error(`Error al eliminar favorito con ID ${localId}:`, error);
+      }
+    });
+  }
+
   /*
   // ⚡ Desplegar/Ocultar el mapa embebido de cada tarjeta ("Ver más")
   public toggleVerMas(local: LocalCercano): void {

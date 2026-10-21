@@ -3,12 +3,12 @@
 
     <!-- Botón Volver -->
     <div class="mb-6 flex items-center justify-between">
-      <a [routerLink]="categoriaId() ? ['/inicio/categoria', categoriaId()] : ['/inicio/categoria']"
-        class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200">
+      <a (click)="volver()"
+        class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 cursor-pointer">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        Volver al listado
+        Volver
       </a>
 
       <div class="relative inline-block">

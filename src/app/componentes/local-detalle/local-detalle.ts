@@ -2,6 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatosService } from '../../service/serviceApp/service';
+import { Location } from '@angular/common';
+
 @Component({
   imports: [CommonModule, RouterLink],
   selector: 'app-local-detalle',
@@ -19,6 +21,8 @@ export class LocalDetalle implements OnInit {
   esFavorito = false;
   userId = Number(localStorage.getItem('id'));
   localId = Number(this.route.snapshot.paramMap.get('id'));
+
+  constructor(private location: Location) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
@@ -89,31 +93,35 @@ export class LocalDetalle implements OnInit {
       });
   }
 
-alternarFavorito(): void {
-  this.menuAbierto = false;
-  
-  if (this.esFavorito) {
-    this.datosService.eliminarFavorito(this.userId, this.localId)
-      .subscribe({
-        next: (respuesta) => {
-          console.log('Eliminado de favoritos:', respuesta);
-          this.esFavorito = false;
-        },
-        error: (error) => {
-          console.error('Error al eliminar favorito:', error);
-        }
-      });
-  } else {
-    this.datosService.agregarFavorito(this.userId, this.localId)
-      .subscribe({
-        next: (respuesta) => {
-          console.log('Agregado a favoritos:', respuesta);
-          this.esFavorito = true;
-        },
-        error: (error) => {
-          console.error('Error al agregar favorito:', error);
-        }
-      });
+  alternarFavorito(): void {
+    this.menuAbierto = false;
+
+    if (this.esFavorito) {
+      this.datosService.eliminarFavorito(this.userId, this.localId)
+        .subscribe({
+          next: (respuesta) => {
+            console.log('Eliminado de favoritos:', respuesta);
+            this.esFavorito = false;
+          },
+          error: (error) => {
+            console.error('Error al eliminar favorito:', error);
+          }
+        });
+    } else {
+      this.datosService.agregarFavorito(this.userId, this.localId)
+        .subscribe({
+          next: (respuesta) => {
+            console.log('Agregado a favoritos:', respuesta);
+            this.esFavorito = true;
+          },
+          error: (error) => {
+            console.error('Error al agregar favorito:', error);
+          }
+        });
+    }
   }
-}
+
+  volver() {
+    this.location.back();
+  }
 }
