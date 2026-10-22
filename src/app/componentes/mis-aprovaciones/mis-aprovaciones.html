@@ -1,0 +1,57 @@
+<div class="min-h-screen bg-gray-50 p-8">
+  <div class="max-w-5xl mx-auto">
+    
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Mis Solicitudes de Locales</h1>
+      <p class="text-gray-500 mt-2">Acá podés ver el estado de los locales que enviaste a revisión.</p>
+    </div>
+
+    <div *ngIf="cargando()" class="text-center text-gray-500 py-10">Cargando tus solicitudes...</div>
+
+    <div *ngIf="!cargando() && misSolicitudes().length === 0" class="bg-white rounded-xl shadow p-10 text-center">
+      <h3 class="text-xl font-medium text-gray-600">Aún no enviaste ninguna solicitud</h3>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6">
+      <div *ngFor="let sol of misSolicitudes()" class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 p-6">
+        
+        <div class="flex justify-between items-start mb-4">
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800">{{ sol.nombre }}</h2>
+            <p class="text-sm text-gray-500">{{ sol.calle }} {{ sol.altura }}</p>
+          </div>
+          
+          <!-- Etiquetas de estado -->
+          <span *ngIf="sol.estado === 'pendiente'" class="bg-yellow-100 text-yellow-800 font-bold px-3 py-1 rounded-full text-sm">Pendiente de revisión</span>
+          <span *ngIf="sol.estado === 'aprobado'" class="bg-green-100 text-green-800 font-bold px-3 py-1 rounded-full text-sm">Aprobado</span>
+          <span *ngIf="sol.estado === 'rechazado'" class="bg-red-100 text-red-800 font-bold px-3 py-1 rounded-full text-sm">Rechazado</span>
+        </div>
+
+        <!-- Mensaje si está pendiente -->
+        <div *ngIf="sol.estado === 'pendiente'" class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+          <p class="text-gray-600">Tu solicitud fue recibida y está siendo analizada por un administrador. Te notificaremos cuando haya novedades.</p>
+        </div>
+
+        <!-- Mensaje si está rechazado -->
+        <div *ngIf="sol.estado === 'rechazado'" class="bg-red-50 border border-red-200 rounded-lg p-4">
+          <h4 class="font-bold text-red-700 mb-1">Motivo del rechazo:</h4>
+          <p class="text-red-600">{{ sol.motivo_rechazo || 'No cumple con los requisitos de la plataforma.' }}</p>
+        </div>
+
+        <!-- Mensaje si está aprobado -->
+        <div *ngIf="sol.estado === 'aprobado'" class="bg-green-50 border border-green-200 rounded-lg p-4">
+          <h4 class="font-bold text-green-800 mb-2">¡Felicitaciones! Tu local ya es parte de KIAGO.</h4>
+          <p class="text-green-700 mb-4">Se ha creado tu cuenta de usuario dueño para que puedas administrar tu local. Utilizá estos datos para iniciar sesión:</p>
+          
+          <div class="bg-white border border-green-200 rounded p-3 text-sm">
+            <p><strong class="text-gray-700">Correo:</strong> {{ sol.correo_electronico }}</p>
+            <p><strong class="text-gray-700">Contraseña Temporal:</strong> <span class="font-mono bg-gray-100 px-1">{{ sol.password_temporal }}</span></p>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">* Por razones de seguridad, te recomendamos cambiar la contraseña luego de tu primer inicio de sesión.</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

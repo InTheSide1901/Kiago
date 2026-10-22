@@ -68,7 +68,7 @@ export class Favoritos {
     });
   }
 
-  private eliminar(localId: number): void {
+  eliminar(localId: number): void {
     this.datosService.eliminarFavorito(this.userId, localId).subscribe({
       next: () => {
         console.log(`Favorito con ID ${localId} eliminado correctamente.`);

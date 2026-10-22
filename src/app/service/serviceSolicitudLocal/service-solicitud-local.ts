@@ -1,24 +1,39 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Categoria } from '../../componentes/solicitud-local/solicitud-local'; // O donde definas la interfaz
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class ServiceSolicitudLocal {
-private apiUrl = 'http://localhost:3000/api/solicitudes_locales'; 
+  private apiUrl = 'http://localhost:3000/api'; 
 
   constructor(private http: HttpClient) {}
 
-  enviarSolicitud(datosLocal: any): Observable<any> {
-    // 1. Recuperamos el token donde lo tengas guardado (ajusta 'token' si usas otro nombre)
-    const token = localStorage.getItem('token'); 
+  // --- Métodos para el formulario de envío (Usuario Normal) ---
 
-    // 2. Configuramos las cabeceras HTTP para incluir el Authorization: Bearer
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+  getCategorias(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${this.apiUrl}/categorias`);
+  }
 
-    // 3. Enviamos la petición incluyendo los headers
-    return this.http.post(this.apiUrl, datosLocal, { headers });
+  enviarSolicitud(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/solicitudes`, payload);
+  }
+
+  // --- Métodos para el panel de administración (Administrador) ---
+
+  getSolicitudesPendientes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/solicitudes/pendientes`);
+  }
+
+  aprobarSolicitud(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/solicitudes/${id}/aprobar`, {});
+  }
+
+  rechazarSolicitud(id: number, motivo: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/solicitudes/${id}/rechazar`, { motivo });
+  }
+  getMisSolicitudes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/mis-solicitudes`);
   }
 }

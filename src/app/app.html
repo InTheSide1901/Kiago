@@ -1,4 +1,7 @@
-<app-header></app-header>
+<app-header *ngIf="mostrarLayout"></app-header>
+
 <main>
     <router-outlet (activate)="initializeFlowbite()"></router-outlet>
 </main>
+
+<app-footer *ngIf="mostrarLayout"></app-footer>

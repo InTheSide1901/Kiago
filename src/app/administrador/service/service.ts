@@ -1,29 +1,38 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SolicitudLocal } from './solicitud-local.model';
+// Asegurate de que la ruta coincida con donde tenés definida la interfaz
+import { Categoria } from '../../componentes/solicitud-local/solicitud-local'; 
 
 @Injectable({
   providedIn: 'root'
 })
+export class ServiceSolicitudLocal {
+  private apiUrl = 'http://localhost:3000/api'; 
 
+  constructor(private http: HttpClient) {}
 
-export class Service {
-  private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api/admin/solicitudes'; // Ajustá según tu puerto/URL
+  // --- Métodos para el formulario de envío (Usuario Normal) ---
 
-  // Obtener solicitudes por estado (por defecto 'pendiente')
-  getSolicitudes(estado: string = 'pendiente'): Observable<SolicitudLocal[]> {
-    return this.http.get<SolicitudLocal[]>(`${this.apiUrl}?estado=${estado}`);
+  getCategorias(): Observable<Categoria[]> {
+    return this.http.get<Categoria[]>(`${this.apiUrl}/categorias`);
   }
 
-  // Aprobar solicitud (el backend creará el usuario dueño y enviará las credenciales)
-  aprobarSolicitud(id: number): Observable<{ message: string }> {
-    return this.http.put<{ message: string }>(`${this.apiUrl}/${id}/aprobar`, {});
+  enviarSolicitud(payload: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/solicitudes`, payload);
   }
 
-  // Rechazar solicitud
-  rechazarSolicitud(id: number, motivo_rechazo?: string): Observable<{ message: string }> {
-    return this.http.put<{ message: string }>(`${this.apiUrl}/${id}/rechazar`, { motivo_rechazo });
+  // --- Métodos para el panel de administración (Administrador) ---
+
+  getSolicitudesPendientes(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/solicitudes/pendientes`);
+  }
+
+  aprobarSolicitud(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/solicitudes/${id}/aprobar`, {});
+  }
+
+  rechazarSolicitud(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/solicitudes/${id}/rechazar`, {});
   }
 }

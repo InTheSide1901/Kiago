@@ -9,7 +9,7 @@ import {Footer} from '../footer/footer'
 import {Header} from '../header/header'
 
 @Component({
-  imports: [CommonModule, Buscador, Prueba, Footer],
+  imports: [CommonModule, Buscador, Prueba],
   selector: 'app-inicio-categoria',
   styleUrl: './inicio-categoria.css',
   templateUrl: './inicio-categoria.html',

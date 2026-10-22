@@ -19,12 +19,41 @@ export class Login {
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => this.router.navigate(['/inicio/categoria']),
-        error: (err) => alert(err.error?.message || 'Credenciales inválidas')
-      });
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      alert('Por favor, completa correctamente los campos.');
+      return;
     }
+
+    // Extraemos los valores directamente del formulario
+    const datosLogin = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    };
+
+    // Pasamos el objeto completo (soluciona el error de "Expected 1 arguments")
+    // NOTA: Si tu servicio realmente necesita dos argumentos separados, usa: 
+    // this.authService.login(datosLogin.email, datosLogin.password)
+    this.authService.login(datosLogin).subscribe({
+      next: (respuesta) => {
+        localStorage.setItem('token', respuesta.token);
+        localStorage.setItem('usuario', JSON.stringify(respuesta.usuario));
+
+        const rol = respuesta.usuario.rol_id;
+
+        // 3. Lo enviamos a la ruta que le corresponde según su rol
+        if (rol === 1) {
+          this.router.navigate(['/admin']); 
+        } else if (rol === 2) {
+          this.router.navigate(['/panel-dueno']); // 
+        } else if (rol === 3) {
+          this.router.navigate(['/inicio/categoria']); 
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Credenciales incorrectas');
+      }
+    });
   }
 }

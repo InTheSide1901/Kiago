@@ -1,1 +1,57 @@
-<h1>inicio-administrador</h1>
+<div class="min-h-screen bg-gray-100 p-8">
+  <div class="max-w-7xl mx-auto">
+    
+    <!-- Encabezado con título, etiqueta y botón de cierre de sesión -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-800">Panel de Administración: Solicitudes</h1>
+      
+      <div class="flex items-center gap-4">
+        <span class="bg-indigo-100 text-indigo-800 text-sm font-semibold px-4 py-2 rounded-full">
+          {{ solicitudes().length }} Pendientes
+        </span>
+        <button (click)="cerrarSesion()" class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+          Cerrar Sesión
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="cargando()" class="text-center text-gray-500 py-10">
+      Cargando solicitudes...
+    </div>
+
+    <div *ngIf="!cargando() && solicitudes().length === 0" class="bg-white rounded-xl shadow p-10 text-center">
+      <h3 class="text-xl font-medium text-gray-600">No hay solicitudes pendientes</h3>
+      <p class="text-gray-400 mt-2">Todo está al día.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let sol of solicitudes()" class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 flex flex-col">
+        <div class="p-6 flex-grow">
+          <div class="flex justify-between items-start">
+            <h2 class="text-xl font-bold text-gray-800 mb-1">{{ sol.nombre }}</h2>
+            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">Pendiente</span>
+          </div>
+          <p class="text-sm text-indigo-600 font-semibold mb-4">{{ sol.categoria_nombre }}</p>
+          
+          <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ sol.descripcion }}</p>
+          
+          <div class="space-y-2 text-sm text-gray-500">
+            <p><strong class="text-gray-700">Email:</strong> {{ sol.correo_electronico }}</p>
+            <p><strong class="text-gray-700">Teléfono:</strong> {{ sol.telefono }}</p>
+            <p><strong class="text-gray-700">Ubicación:</strong> {{ sol.calle }} {{ sol.altura }}, {{ sol.ciudad_nombre }}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 border-t border-gray-100">
+          <button (click)="rechazar(sol.id)" class="py-3 text-red-600 font-semibold hover:bg-red-50 transition-colors">
+            Rechazar
+          </button>
+          <button (click)="aprobar(sol.id)" class="py-3 text-green-600 font-semibold bg-green-50 hover:bg-green-100 transition-colors border-l border-gray-100">
+            Aprobar
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
