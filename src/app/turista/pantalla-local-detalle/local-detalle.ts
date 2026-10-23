@@ -62,8 +62,6 @@ export class LocalDetalle implements OnInit {
     });
   }
 
-  // ---- MÉTODOS DE TU COMPAÑERO ----
-
   private consultarEstadoFavorito(id: number): void {
     if (!this.userId || !id) return;
 
@@ -108,11 +106,9 @@ export class LocalDetalle implements OnInit {
   seleccionarOpcion(opcion: string): void {
     this.menuAbierto = false;
     switch (opcion) {
-      case 'agendar':
-        console.log('Agendar lugar');
+      case 'agendar':        
         break;
       case 'reportar':
-        console.log('Reportar lugar');
         break;
     }
   }

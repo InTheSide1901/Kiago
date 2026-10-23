@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-// Asegurate de que la ruta coincida con donde tenés definida la interfaz
-import { Categoria } from '../../componentes/solicitud-local/solicitud-local'; 
+import { Categoria } from '../../turista/solicitud-local/solicitud-local'; 
 
 @Injectable({
   providedIn: 'root'

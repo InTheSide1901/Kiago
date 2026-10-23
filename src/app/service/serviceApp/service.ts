@@ -77,7 +77,7 @@ export class LocalesService {
 }
 
 
-// ✅ CORRECCIÓN AQUÍ
+
 @Injectable({
   providedIn: 'root'
 })

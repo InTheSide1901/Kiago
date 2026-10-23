@@ -10,7 +10,7 @@ import { AuthService } from '../../service/authService/auth-service'; // Ajustá
   templateUrl: './navbar.html',
 })
 export class Navbar {
-  // Hacemos el servicio público para acceder a la Signal desde el HTML
+  
   public authService = inject(AuthService);
 
   onLogout(): void {

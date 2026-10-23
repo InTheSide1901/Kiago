@@ -15,9 +15,8 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class ServicePerfil {
-    private http = inject(HttpClient);
-  // Ajusta esta URL a la ruta real de tu backend Node.js
-  private apiUrl = 'http://localhost:3000/api/usuarios'; 
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:3000/api/usuarios';
 
   obtenerPorId(id: number): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.apiUrl}/${id}`);

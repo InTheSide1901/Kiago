@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../../service/authService/auth-service'; // Asegurate de que la ruta sea correcta
+import { AuthService } from '../../service/authService/auth-service'; 
 @Component({
   imports: [CommonModule, RouterLink],
   selector: 'app-header',

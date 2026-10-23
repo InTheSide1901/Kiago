@@ -31,9 +31,7 @@ export class Login {
       password: this.loginForm.value.password
     };
 
-    // Pasamos el objeto completo (soluciona el error de "Expected 1 arguments")
-    // NOTA: Si tu servicio realmente necesita dos argumentos separados, usa: 
-    // this.authService.login(datosLogin.email, datosLogin.password)
+   
     this.authService.login(datosLogin).subscribe({
       next: (respuesta) => {
         localStorage.setItem('token', respuesta.token);

@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Navbar } from './componentes/navbar/navbar';
+import { Navbar } from './turista/navbar/navbar';
 import { initFlowbite } from 'flowbite';
 import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { Header } from './componentes/header/header';
-import { Footer } from './componentes/footer/footer';
+import { Header } from './turista/header/header';
+import { Footer } from './turista/footer/footer';
 
 @Component({
   imports: [RouterOutlet, CommonModule, Header, Footer], // <-- Se eliminaron los comentarios y se agregaron los componentes

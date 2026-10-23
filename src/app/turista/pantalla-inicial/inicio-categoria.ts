@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Buscador } from '../../herramientas/buscador/buscador'
-// Importa desde la ruta correcta de tu servicio
+import { Buscador } from '../buscador/buscador'
 import { DatosService, Categoria } from '../../service/serviceApp/service'; 
-import { Prueba } from '../prueba/prueba';
-import {Footer} from '../footer/footer'
-import {Header} from '../header/header'
+import { Prueba } from '../pantalla-inicial-mapa/prueba';
+
 
 @Component({
   imports: [CommonModule, Buscador, Prueba],

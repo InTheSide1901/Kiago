@@ -65,11 +65,7 @@ export class Comentario implements OnInit {
   obtenerComentarios(): void {
   this.cargandoComentarios.set(true);
   this.comentariosService.getComentariosByLocalId(this.localId).subscribe({
-    next: (data) => {
-      console.log('=== DEPURACIÓN COMENTARIOS ===');
-      console.log('ID Usuario Logueado (localStorage):', this.currentUserId);
-      console.log('Primer comentario recibido del backend:', data[0]);
-
+    next: (data) => {      
       this.comentariosList.set(data);
       this.cargandoComentarios.set(false);
 

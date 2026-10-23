@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import * as L from 'leaflet';
 
-import { Buscador } from '../../herramientas/buscador/buscador'
+import { Buscador } from '../buscador/buscador'
 import { LocalCercano, LocalFavorito } from '../../service/serviceApp/service';
 import { DatosService } from '../../service/serviceApp/service';
 
@@ -59,8 +59,6 @@ export class Favoritos {
       next: (locales) => {
         this.localesFav = [...locales.favoritos];
         this.cdr.detectChanges();
-
-        console.log('Favoritos obtenidos:', this.localesFav);
       },
       error: (error) => {
         console.error('Error al buscar favoritos:', error);
@@ -70,8 +68,7 @@ export class Favoritos {
 
   eliminar(localId: number): void {
     this.datosService.eliminarFavorito(this.userId, localId).subscribe({
-      next: () => {
-        console.log(`Favorito con ID ${localId} eliminado correctamente.`);
+      next: () => {        
         this.localesFav = this.localesFav.filter(local => local.id !== localId);
         this.cdr.detectChanges();
       },

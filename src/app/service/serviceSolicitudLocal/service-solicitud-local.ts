@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Categoria } from '../../componentes/solicitud-local/solicitud-local'; // O donde definas la interfaz
+import { Categoria } from '../../turista/solicitud-local/solicitud-local'; // O donde definas la interfaz
 @Injectable({
   providedIn: 'root'
 })

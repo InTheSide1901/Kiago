@@ -63,7 +63,6 @@ export class Buscador implements OnInit{
   seleccionarLocal(local: any) {
     this.mostrarResultados.set(false);
     this.textoBusqueda.set('');
-    // Redirige al detalle usando la estructura de tu app
     this.router.navigate(['/inicio/categoria', local.categoria_id, 'detalle', local.id]);
   }
 

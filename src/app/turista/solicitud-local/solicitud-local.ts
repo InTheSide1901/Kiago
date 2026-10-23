@@ -106,9 +106,6 @@ export class SolicitudLocal implements OnInit {
 
     // 4. Adjuntamos el archivo físico con el nombre 'imagen' (el mismo que busca multer)
     formData.append('imagen', this.archivoSeleccionado);
-
-    console.log('Enviando FormData al backend...');
-
     // 5. Enviamos la petición
     this.solicitudesService.enviarSolicitud(formData).subscribe({
       next: (respuesta) => {

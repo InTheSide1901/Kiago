@@ -153,16 +153,14 @@ export class Prueba implements AfterViewInit, OnDestroy {
 
     this.localesService.getLocalesCercanos(this.latitud, this.longitud, this.radioMetros)
       .pipe(
-        finalize(() => {
-          // ⚡ ESTO APAGA EL SPINNER SIEMPRE
+        finalize(() => {          
           this.buscando = false;
           this.busquedaRealizada = true;
-          this.cdr.detectChanges(); // Fuerza a Angular a renderizar las tarjetas en pantalla
+          this.cdr.detectChanges(); 
         })
       )
       .subscribe({
-        next: (data: LocalCercano[]) => {
-          console.log('Locales recibidos:', data); // Revisa en la consola que sea un Array []
+        next: (data: LocalCercano[]) => {          
           this.locales = Array.isArray(data) ? data : [];
           this.limpiarMarcadoresAnteriores();
 
