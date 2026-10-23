@@ -4,7 +4,7 @@
         <!-- Header del Perfil -->
         <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
           <!-- Banner Superior -->
-          <div class="h-32 bg-gradient-to-r from-red-500 to-red-600"></div>
+          <div class="h-32 bg-gradient-to-r from-kiago-principal to-gray-900"></div>
           
           <div class="px-6 sm:px-10 pb-8 relative">
             <!-- Foto de Perfil -->
@@ -16,7 +16,7 @@
                   class="w-full h-full object-cover"
                 />
               </div>
-              <button class="bg-gray-900 hover:bg-gray-800 text-white px-5 py-2.5 rounded-full font-medium text-sm transition-colors shadow-sm">
+              <button class="bg-kiago-principal hover:bg-kiago-hover text-white px-5 py-2.5 rounded-full font-medium text-sm transition-colors shadow-sm">
                 Editar Perfil
               </button>
             </div>
@@ -26,12 +26,13 @@
               <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
                 {{ usuario?.nombre }} {{ usuario?.apellido }}
               </h1>
-              <p class="text-red-500 font-medium mt-1 flex items-center gap-1.5">
+              <p class="text-kiago-principal font-medium mt-1 flex items-center gap-1.5">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                 </svg>
                 <!-- Renderizamos el rol dependiendo del rol_id -->
-                {{ obtenerNombreRol(usuario?.rol_id) }}
+                <!-- {{ obtenerNombreRol(usuario?.rol_id) }} -->
+                {{ usuario?.rol_id === 1 ? 'Administrador' : usuario?.rol_id === 2 ? 'Local' : usuario?.rol_id === 3 ? 'Turista' : 'Desconocido' }}
               </p>
             </div>
           </div>

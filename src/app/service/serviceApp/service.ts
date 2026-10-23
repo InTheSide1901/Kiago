@@ -119,6 +119,11 @@ export class DatosService {
       params: { q: termino }
     });
   }
+
+  getLugares(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/locales`);
+  }
+
   // ------------------favoritos------------------------
    agregarFavorito(userId: number, localId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/favoritosAgregar`, { user_id: userId, local_id: localId });

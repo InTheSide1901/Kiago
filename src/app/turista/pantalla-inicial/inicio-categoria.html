@@ -69,6 +69,111 @@
   }
 </section>
 
+<!-- Sección: Asistente de Viaje con IA -->
+
+<section class="max-w-6xl mx-auto my-12 px-4">
+  <div
+    class="bg-gradient-to-r from-kiago-principal to-[#437a48] rounded-3xl p-8 sm:p-12 text-white shadow-xl relative overflow-hidden"
+  >
+    <!-- Elementos decorativos de fondo -->
+    <div
+      class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"
+    ></div>
+    <div
+      class="absolute right-20 top-0 w-32 h-32 bg-white/5 rounded-full blur-xl pointer-events-none"
+    ></div>
+
+    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <!-- Columna Izquierda: Encabezado e Información -->
+      <div class="lg:col-span-5 space-y-4">
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase"
+        >
+          <svg class="w-4 h-4 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+            />
+          </svg>
+          Kiago AI Planner
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          Crea tu itinerario personalizado en segundos
+        </h2>
+        <p class="text-green-100 text-sm sm:text-base leading-relaxed">
+          Indícanos tus gustos, tiempo disponible y ritmo ideal. Nuestra inteligencia artificial
+          diseñará una ruta a tu medida.
+        </p>
+      </div>
+
+      <!-- Columna Derecha: Tarjeta Interactiva / Formulario -->
+      <div class="lg:col-span-7 bg-white text-gray-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+        <form class="space-y-4">
+          <!-- Campo 1: Destino / Punto de inicio -->
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+              ¿Dónde estás o qué ciudad quieres recorrer?
+            </label>
+            <input
+              type="text"
+              placeholder="Ej. Lanús, Buenos Aires, o tu ubicación actual..."
+              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2e5d32] focus:bg-white transition"
+            />
+          </div>
+
+          <!-- Campos en Grid: Días e Intereses -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                Tiempo disponible
+              </label>
+              <select
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2e5d32] focus:bg-white transition"
+              >
+                <option>Paseo express (2-4 horas)</option>
+                <option>Medio día (6 horas)</option>
+                <option>Día completo (1 día)</option>
+                <option>Fin de semana (2-3 días)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gray-700 uppercase mb-1">
+                Estilo de viaje
+              </label>
+              <select
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#2e5d32] focus:bg-white transition"
+              >
+                <option>Gastronómico & Cafés</option>
+                <option>Cultura & Museos</option>
+                <option>Naturaleza & Parques</option>
+                <option>Noche & Entretenimiento</option>
+                <option>Equilibrado (Variado)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Botón Generar -->
+          <button
+            type="button"
+            class="w-full mt-2 py-3.5 px-6 bg-kiago-principal hover:bg-kiago-hover text-white font-semibold rounded-xl text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+            Generar Recorrido con IA
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <!-- Aquí continúa tu mapa y tarjetas de resultados sin modificaciones -->
 <app-prueba></app-prueba>
 

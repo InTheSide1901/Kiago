@@ -12,6 +12,7 @@ import { Favoritos } from './turista/favoritos/favoritos';
 import { SobreNosotros } from './turista/sobre-nosotros/sobre-nosotros';
 import { Perfil } from './turista/perfil/perfil';
 import { MisAprovaciones } from './turista/mis-aprovaciones/mis-aprovaciones';
+import { Search } from './turista/search/search';
 
 // Guards que van a proteger las rutas
 import { adminGuard } from './administrador/guards/admin-guard';
@@ -25,6 +26,7 @@ export const routes: Routes = [
   { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
+  { path: 'search', component: Search },
   // --- RUTAS PARA TURISTAS (Protegidas por turistaGuard) ---
   { path: 'favoritos', component: Favoritos, canActivate: [turistaGuard] },
   { path: 'inicio/categoria', component: InicioCategoria, canActivate: [turistaGuard] },

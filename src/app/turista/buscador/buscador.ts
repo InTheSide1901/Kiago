@@ -4,8 +4,11 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { DatosService } from '../../service/serviceApp/service';
+import { FormsModule } from '@angular/forms';
+
+
 @Component({
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   selector: 'app-buscador',
   styleUrl: './buscador.css',
   templateUrl: './buscador.html',
@@ -14,6 +17,7 @@ export class Buscador implements OnInit{
   private datosService = inject(DatosService);
   private router = inject(Router);
   private elementRef = inject(ElementRef);
+  public busqueda: string = '';
 
   private busquedaSubject = new Subject<string>();
 
@@ -71,6 +75,13 @@ export class Buscador implements OnInit{
   onClickOutside(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.mostrarResultados.set(false);
+    }
+  }
+
+  realizarBusqueda(): void {
+    if (this.busqueda.trim() !== '') {
+      // Redirigir a la página de resultados de búsqueda con el término como parámetro
+      this.router.navigate(['/search'], { queryParams: { q: this.busqueda } });
     }
   }
 }

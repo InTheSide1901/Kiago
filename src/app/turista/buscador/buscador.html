@@ -1,74 +1,39 @@
-<div class="relative w-full max-w-xl mx-auto">
-  <!-- Contenedor Principal del Buscador (ahora con focus-within para el borde de todo el conjunto) -->
-  <div class="relative flex items-center bg-white border border-slate-200 rounded-full shadow-sm pr-1.5 focus-within:ring-2 focus-within:ring-[#2d5a27] focus-within:border-transparent transition-all">
-    
-    <!-- Icono Lupa -->
-    <div class="absolute left-4 text-slate-400 pointer-events-none">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-      </svg>
-    </div>
-
-    <!-- Campo de Texto (se quitó el borde individual y se hizo transparente) -->
-    <input 
-      type="text" 
-      [value]="textoBusqueda()"
-      (input)="onInput($event)"
-      (focus)="textoBusqueda() && mostrarResultados.set(true)"
-      placeholder="Buscar lugares, ciudades, gastronomía..." 
-      class="w-full pl-11 pr-10 py-3.5 bg-transparent outline-none text-slate-800 placeholder-slate-400 text-sm transition-all rounded-full"
-    />
-
-    <!-- Indicator Spinner Carga -->
-    @if (cargando()) {
-      <div class="absolute right-[100px]"> <!-- Movido hacia la izquierda para hacer espacio al botón -->
-        <div class="w-4 h-4 border-2 border-[#2d5a27] border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    }
-
-    <!-- Botón Buscar (Añadido para igualar el diseño visual) -->
-    <button class="bg-[#2d5a27] hover:bg-[#1f401b] text-white px-5 py-2.5 rounded-full text-sm font-medium transition-colors shrink-0">
-      Buscar
-    </button>
-  </div>
-
-  <!-- Desplegable de Resultados -->
-  @if (mostrarResultados() && textoBusqueda().trim().length > 0) {
-    <div class="absolute z-50 left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
-      
-      @if (resultados().length > 0) {
-        <ul class="divide-y divide-slate-50">
-          @for (local of resultados(); track local.id) {
-            <li>
-              <button 
-                (click)="seleccionarLocal(local)" 
-                class="w-full px-5 py-3.5 text-left hover:bg-green-50/60 transition-colors flex items-center justify-between group cursor-pointer"
-              >
-                <div class="flex items-center gap-3">
-                  <!-- Colores actualizados a tonos verdes en lugar de índigo -->
-                  <div class="w-8 h-8 rounded-lg bg-green-100 text-[#2d5a27] flex items-center justify-center shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4"/>
-                    </svg>
-                  </div>
-                  <span class="font-medium text-slate-800 group-hover:text-[#2d5a27] text-sm transition-colors">
-                    {{ local.nombre }}
-                  </span>
-                </div>
-                <span class="text-xs font-semibold text-slate-400 group-hover:text-[#2d5a27] flex items-center gap-1">
-                  Ver
-                  <span class="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
-                </span>
-              </button>
-            </li>
-          }
-        </ul>
-      } @else if (!cargando()) {
-        <!-- Estado sin coincidencias -->
-        <div class="p-4 text-center text-sm text-slate-500">
-          No se encontraron locales con el nombre "<span class="font-semibold">{{ textoBusqueda() }}</span>"
+<form class="max-w-3xl mx-auto w-full px-4 my-7" (ngSubmit)="realizarBusqueda()">
+      <label for="search" class="sr-only">Search</label>
+      <div class="relative flex items-center">
+        <!-- Ícono de lupa centrado a la izquierda -->
+        <div class="absolute inset-y-0 inset-s-0 flex items-center ps-4 pointer-events-none">
+          <svg
+            class="w-5 h-5 text-gray-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-width="2"
+              d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+            />
+          </svg>
         </div>
-      }
-    </div>
-  }
-</div>
+
+        <input
+          type="search"
+          id="search"
+          name="busqueda"
+          [(ngModel)]="busqueda"
+          class="block w-full py-3.5 ps-11 pe-28 text-base text-gray-700 bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#2e5d32] focus:border-transparent placeholder:text-gray-400 shadow-sm"
+          placeholder="Buscar museos, ciudades, gastronomía..."
+          required
+        />
+
+        <button
+          type="submit"
+          class="absolute inset-e-2 text-white bg-[#2e5d32] hover:bg-[#234827] focus:ring-4 focus:ring-green-100 font-medium rounded-2xl text-sm px-6 py-2 transition-colors"
+        >
+          Buscar
+        </button>
+      </div>
+    </form>
