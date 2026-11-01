@@ -6,9 +6,9 @@ import { Categoria } from '../../turista/solicitud-local/solicitud-local'; // O 
   providedIn: 'root'
 })
 export class ServiceSolicitudLocal {
-  private apiUrl = 'http://localhost:3000/api'; 
+  private apiUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // --- Métodos para el formulario de envío (Usuario Normal) ---
 
@@ -36,4 +36,8 @@ export class ServiceSolicitudLocal {
   getMisSolicitudes(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/mis-solicitudes`);
   }
+  getMisLocales(): Observable<any[]> {
+  // Le agregamos /locales a la ruta
+  return this.http.get<any[]>(`${this.apiUrl}/locales/mis-locales`); 
+}
 }

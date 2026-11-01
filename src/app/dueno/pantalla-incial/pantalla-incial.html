@@ -1,23 +1,158 @@
-<div class="min-h-screen bg-gray-50 p-8">
+<app-navbar-dueno></app-navbar-dueno>
+
+<div class="min-h-screen bg-[#f8f9fc] p-4 sm:p-6 md:p-10 font-sans text-slate-800">
   <div class="max-w-7xl mx-auto">
     
-    <!-- Encabezado exclusivo del Dueño -->
-    <div class="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+    <!-- Encabezado y Saludo -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-5">
       <div>
-        <h1 class="text-3xl font-bold text-gray-800">Mi Negocio</h1>
-        <p class="text-gray-500 text-sm mt-1">Panel de administración de tu local</p>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Resumen</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-2 flex items-center gap-2">
+          Hola, {{ nombreUsuario() }} <span class="text-3xl">👋</span>
+        </h1>
+        <p class="text-slate-500 font-medium text-sm md:text-base">
+          Este es el estado actual de tus establecimientos.
+        </p>
       </div>
-      
-      <!-- Botón de Cerrar Sesión -->
-      <button (click)="cerrarSesion()" class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors shadow-sm">
-        Cerrar Sesión
+
+      <button routerLink="/panel-dueno/formulario-dueno" class="w-full md:w-auto bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 px-6 rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 shrink-0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Nuevo lugar
       </button>
+    </header>
+
+    <!-- Tarjetas de Métricas -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      
+      <!-- Total -->
+      <div (click)="filtrarLocales('todos')" class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition-all">
+        <div class="w-12 h-12 bg-indigo-50 text-indigo-500 rounded-xl flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-400">Total de lugares</p>
+          <p class="text-2xl font-bold text-slate-800 leading-tight">
+            <span *ngIf="!cargando()">{{ metricas().total }}</span>
+            <span *ngIf="cargando()" class="animate-pulse bg-slate-200 text-transparent rounded">0</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Aprobados -->
+      <div (click)="filtrarLocales('aprobados')" class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition-all">
+        <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-400">Aprobados</p>
+          <p class="text-2xl font-bold text-slate-800 leading-tight">
+            <span *ngIf="!cargando()">{{ metricas().aprobados }}</span>
+            <span *ngIf="cargando()" class="animate-pulse bg-slate-200 text-transparent rounded">0</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Pendientes -->
+      <div (click)="filtrarLocales('pendientes')" class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition-all">
+        <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-400">Pendientes</p>
+          <p class="text-2xl font-bold text-slate-800 leading-tight">
+            <span *ngIf="!cargando()">{{ metricas().pendientes }}</span>
+            <span *ngIf="cargando()" class="animate-pulse bg-slate-200 text-transparent rounded">0</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Rechazados -->
+      <div (click)="filtrarLocales('rechazados')" class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4 cursor-pointer hover:shadow-md transition-all">
+        <div class="w-12 h-12 bg-rose-50 text-rose-500 rounded-xl flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-slate-400">Rechazados</p>
+          <p class="text-2xl font-bold text-slate-800 leading-tight">
+            <span *ngIf="!cargando()">{{ metricas().rechazados }}</span>
+            <span *ngIf="cargando()" class="animate-pulse bg-slate-200 text-transparent rounded">0</span>
+          </p>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Contenido del panel (Acá luego pondremos las fotos, editar info, etc.) -->
-    <div class="bg-white rounded-xl shadow-md p-10 text-center border border-gray-100">
-      <h3 class="text-2xl font-medium text-gray-600 mb-2">¡Bienvenido a tu panel!</h3>
-      <p class="text-gray-500">Próximamente podrás editar la información y subir nuevas fotos de tu local desde aquí.</p>
+    <!-- Sección Inferior (Plan y Estados) -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Plan Actual (Ocupa 2 columnas en pantallas grandes) -->
+      <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8 relative flex flex-col justify-between">
+        <div class="absolute top-6 right-6 text-slate-800">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+          </svg>
+        </div>
+        
+        <div>
+          <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Plan actual</p>
+          <!-- Si quisieras cambiar el título dinámicamente, usá interpolación {{ planNombre }} -->
+          <h2 class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Sin plan seleccionado</h2>
+          <p class="text-slate-500 text-sm md:text-base">
+            Elegí un plan para comenzar a publicar tus establecimientos.
+          </p>
+        </div>
+        
+        <div class="mt-8">
+          <a routerLink="/mi-plan" class="inline-flex items-center gap-1 text-indigo-500 font-semibold hover:text-indigo-600 transition-colors">
+            Administrar plan
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Leyenda de Estados (Ocupa 1 columna) -->
+      <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-100 shadow-sm p-6 md:p-8">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5">Estados</p>
+        
+        <ul class="space-y-0 divide-y divide-slate-100">
+          
+          <li class="py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <span class="bg-emerald-50 text-emerald-600 border border-emerald-100 text-xs font-bold px-3 py-1 rounded-md w-24 text-center shrink-0">
+              Aprobado
+            </span>
+            <span class="text-sm text-slate-500 font-medium">Ya visibles para turistas</span>
+          </li>
+          
+          <li class="py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <span class="bg-amber-50 text-amber-600 border border-amber-100 text-xs font-bold px-3 py-1 rounded-md w-24 text-center shrink-0">
+              Pendiente
+            </span>
+            <span class="text-sm text-slate-500 font-medium leading-tight">Esperando revisión del administrador</span>
+          </li>
+          
+          <li class="py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <span class="bg-rose-50 text-rose-600 border border-rose-100 text-xs font-bold px-3 py-1 rounded-md w-24 text-center shrink-0">
+              Rechazado
+            </span>
+            <span class="text-sm text-slate-500 font-medium leading-tight">Revisá el motivo y corregí el lugar</span>
+          </li>
+          
+        </ul>
+      </div>
+
     </div>
 
   </div>

@@ -20,10 +20,12 @@ import { turistaGuard } from './turista/guards/auth-guard';
 import { duenoGuard } from './dueno/guards/dueno-guard';
 import { PantallaIncial } from './dueno/pantalla-incial/pantalla-incial';
 import { Contactanos } from './turista/contactanos/contactanos';
+import { FormularioDueno } from './dueno/formulario-dueno/formulario-dueno';
 
 export const routes: Routes = [
   // --- RUTAS PÚBLICAS (No requieren estar logueado) ---
-  { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
+  // { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
+  { path: '', redirectTo: 'formulario-dueno', pathMatch: 'full' },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'search', component: Search },
@@ -45,6 +47,7 @@ export const routes: Routes = [
 
   // --- RUTAS PARA DUEÑOS (Futuro) ---
   { path: 'panel-dueno', component: PantallaIncial, canActivate: [duenoGuard] },
+  { path: 'panel-dueno/formulario-dueno', component: FormularioDueno},
   
   // --- RUTA COMODÍN (Si escriben cualquier otra cosa) ---
   { path: '**', redirectTo: 'inicio/categoria' }

@@ -39,19 +39,30 @@ export class InicioAdmin implements OnInit {
   }
 
   aprobar(id: number): void {
-    if (confirm('¿Estás seguro de aprobar este local? Se creará un nuevo usuario dueño.')) {
-      this.solicitudesService.aprobarSolicitud(id).subscribe({
-        next: (respuesta) => {
+  if (confirm('¿Estás seguro de aprobar este local?')) {
+    this.solicitudesService.aprobarSolicitud(id).subscribe({
+      next: (respuesta) => {
+        // Verificamos si el backend generó credenciales (usuario nuevo)
+        if (respuesta.credenciales && respuesta.credenciales.password_temporal) {
           const email = respuesta.credenciales.email;
           const password = respuesta.credenciales.password_temporal;
+          alert(`¡Local aprobado con éxito!\n\nSe creó una nueva cuenta de dueño.\nCorreo: ${email}\nContraseña temporal: ${password}`);
+        } else {
+          // Si el usuario ya existía en la DB
+          alert('¡Local aprobado con éxito!\n\nEl local fue asignado a la cuenta del dueño existente.');
+        }
 
-          alert(`¡Local aprobado con éxito!\n\nDatos para enviar al dueño:\nCorreo: ${email}\nContraseña temporal: ${password}`);
-          this.solicitudes.update(actuales => actuales.filter(s => s.id !== id));
-        },
-        error: (err) => alert('Ocurrió un error al aprobar la solicitud.')
-      });
-    }
+        // Quitamos la solicitud de la lista visualmente
+        this.solicitudes.update(actuales => actuales.filter(s => s.id !== id));
+      },
+      error: (err) => {
+        console.error('Error al aprobar solicitud:', err);
+        alert('Ocurrió un error al aprobar la solicitud.');
+      }
+    });
   }
+}
+//agregue nuevo codigo para aprobar solicitudes en caso de que el mismo dueño envie varias para su propio local
 
   rechazar(id: number): void {
     const motivo = prompt('Ingresá el motivo del rechazo (se le mostrará al usuario):');

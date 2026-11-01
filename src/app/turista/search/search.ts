@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [Header, Footer, CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   selector: 'app-search',
   styleUrl: './search.css',
   templateUrl: './search.html',

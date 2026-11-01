@@ -1,56 +1,126 @@
-<div class="min-h-screen bg-gray-100 p-8">
-  <div class="max-w-7xl mx-auto">
+<div class="min-h-screen bg-slate-50 font-sans text-slate-800 antialiased p-4 md:p-8">
+  <div class="max-w-7xl mx-auto space-y-8">
     
-    <!-- Encabezado con título, etiqueta y botón de cierre de sesión -->
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-800">Panel de Administración: Solicitudes</h1>
+    <!-- Encabezado -->
+    <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight text-slate-900">
+          Administración de Locales
+        </h1>
+        <p class="text-sm text-slate-500 mt-1">Revisa y gestiona las solicitudes de nuevos comercios</p>
+      </div>
       
-      <div class="flex items-center gap-4">
-        <span class="bg-indigo-100 text-indigo-800 text-sm font-semibold px-4 py-2 rounded-full">
+      <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+        <!-- Badge de conteo -->
+        <div class="flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 px-4 py-2 rounded-xl text-sm font-semibold">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-600"></span>
+          </span>
           {{ solicitudes().length }} Pendientes
-        </span>
-        <button (click)="cerrarSesion()" class="bg-red-500 hover:bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors shadow-sm">
+        </div>
+
+        <!-- Botón Logout -->
+        <button 
+          (click)="cerrarSesion()" 
+          class="flex items-center gap-2 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 text-slate-600 text-sm font-medium px-4 py-2 rounded-xl transition-all duration-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
           Cerrar Sesión
         </button>
       </div>
+    </header>
+
+    <!-- Estado de Carga -->
+    <div *ngIf="cargando()" class="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border border-slate-200/80 shadow-sm">
+      <div class="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+      <p class="text-slate-500 font-medium mt-4 text-sm">Cargando solicitudes pendientes...</p>
     </div>
 
-    <div *ngIf="cargando()" class="text-center text-gray-500 py-10">
-      Cargando solicitudes...
+    <!-- Estado Vacío (Sin solicitudes) -->
+    <div *ngIf="!cargando() && solicitudes().length === 0" class="bg-white rounded-2xl border border-slate-200/80 p-12 text-center shadow-sm max-w-lg mx-auto">
+      <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-900">¡Todo al día!</h3>
+      <p class="text-slate-500 text-sm mt-1">No hay solicitudes de nuevos locales pendientes de aprobación.</p>
     </div>
 
-    <div *ngIf="!cargando() && solicitudes().length === 0" class="bg-white rounded-xl shadow p-10 text-center">
-      <h3 class="text-xl font-medium text-gray-600">No hay solicitudes pendientes</h3>
-      <p class="text-gray-400 mt-2">Todo está al día.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let sol of solicitudes()" class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 flex flex-col">
-        <div class="p-6 flex-grow">
-          <div class="flex justify-between items-start">
-            <h2 class="text-xl font-bold text-gray-800 mb-1">{{ sol.nombre }}</h2>
-            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-1 rounded">Pendiente</span>
+    <!-- Grilla de Cards de Solicitud -->
+    <div *ngIf="!cargando() && solicitudes().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <div *ngFor="let sol of solicitudes()" class="bg-white rounded-2xl shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow duration-200 flex flex-col justify-between overflow-hidden">
+        
+        <div class="p-6">
+          <!-- Cabecera de Card -->
+          <div class="flex justify-between items-start gap-2 mb-2">
+            <h2 class="text-lg font-bold text-slate-900 leading-snug">{{ sol.nombre }}</h2>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 shrink-0">
+              Pendiente
+            </span>
           </div>
-          <p class="text-sm text-indigo-600 font-semibold mb-4">{{ sol.categoria_nombre }}</p>
-          
-          <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ sol.descripcion }}</p>
-          
-          <div class="space-y-2 text-sm text-gray-500">
-            <p><strong class="text-gray-700">Email:</strong> {{ sol.correo_electronico }}</p>
-            <p><strong class="text-gray-700">Teléfono:</strong> {{ sol.telefono }}</p>
-            <p><strong class="text-gray-700">Ubicación:</strong> {{ sol.calle }} {{ sol.altura }}, {{ sol.ciudad_nombre }}</p>
+
+          <!-- Categoría -->
+          <span class="inline-block text-xs font-semibold tracking-wide text-indigo-600 uppercase mb-3">
+            {{ sol.categoria_nombre }}
+          </span>
+
+          <!-- Descripción -->
+          <p class="text-slate-600 text-sm mb-6 line-clamp-3 leading-relaxed">
+            {{ sol.descripcion }}
+          </p>
+
+          <!-- Datos del contacto -->
+          <div class="space-y-2.5 text-xs text-slate-600 border-t border-slate-100 pt-4">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              <span class="truncate font-medium text-slate-700">{{ sol.correo_electronico }}</span>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+              <span class="font-medium text-slate-700">{{ sol.telefono }}</span>
+            </div>
+
+            <div class="flex items-start gap-2">
+              <svg class="w-4 h-4 text-slate-400 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span class="font-medium text-slate-700 leading-tight">{{ sol.calle }} {{ sol.altura }}, {{ sol.ciudad_nombre }}</span>
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 border-t border-gray-100">
-          <button (click)="rechazar(sol.id)" class="py-3 text-red-600 font-semibold hover:bg-red-50 transition-colors">
+        <!-- Acciones principales -->
+        <div class="grid grid-cols-2 border-t border-slate-100 bg-slate-50/50">
+          <button 
+            (click)="rechazar(sol.id)" 
+            class="py-3 px-4 text-xs font-bold text-rose-600 hover:bg-rose-50/80 transition-colors border-r border-slate-100 flex items-center justify-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
             Rechazar
           </button>
-          <button (click)="aprobar(sol.id)" class="py-3 text-green-600 font-semibold bg-green-50 hover:bg-green-100 transition-colors border-l border-gray-100">
+          <button 
+            (click)="aprobar(sol.id)" 
+            class="py-3 px-4 text-xs font-bold text-emerald-600 hover:bg-emerald-50/80 transition-colors flex items-center justify-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
             Aprobar
           </button>
         </div>
+
       </div>
+
     </div>
 
   </div>
