@@ -10,9 +10,9 @@ export interface Categoria {
   providedIn: 'root'
 })
 export class ServiceFormularioDueno {
-    private apiUrl = 'http://localhost:3000/api';
-    constructor(private http: HttpClient) {}
-    getMetricasDashboard(): Observable<any> {
+  private apiUrl = 'http://localhost:3000/api';
+  constructor(private http: HttpClient) { }
+  getMetricasDashboard(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/locales/metricas`);
   }
 }

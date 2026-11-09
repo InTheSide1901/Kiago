@@ -13,6 +13,7 @@ import { SobreNosotros } from './turista/sobre-nosotros/sobre-nosotros';
 import { Perfil } from './turista/perfil/perfil';
 import { MisAprovaciones } from './turista/mis-aprovaciones/mis-aprovaciones';
 import { Search } from './turista/search/search';
+import { LugaresDueno } from './dueno/lugares-dueno/lugares-dueno';
 
 // Guards que van a proteger las rutas
 import { adminGuard } from './administrador/guards/admin-guard';
@@ -48,6 +49,7 @@ export const routes: Routes = [
   // --- RUTAS PARA DUEÑOS (Futuro) ---
   { path: 'panel-dueno', component: PantallaIncial, canActivate: [duenoGuard] },
   { path: 'panel-dueno/formulario-dueno', component: FormularioDueno, canActivate: [duenoGuard]},
+  { path: 'panel-dueno/lugares', component: LugaresDueno, canActivate: [duenoGuard]},
   
   // --- RUTA COMODÍN (Si escriben cualquier otra cosa) ---
   { path: '**', redirectTo: 'login' }
