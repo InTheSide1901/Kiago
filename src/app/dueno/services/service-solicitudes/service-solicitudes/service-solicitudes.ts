@@ -10,4 +10,7 @@ export class ServiceSolicitudes {
   getLugaresFiltrados(userID: number, filtro: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/locales/mis-locales/filtrados/${userID}/${filtro}`);
   }
+  getLugaresBusqueda(userID: number, busqueda: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/locales/mis-locales/busqueda/${userID}/${busqueda}`);
+  }
 }

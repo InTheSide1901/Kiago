@@ -46,7 +46,7 @@ export class PantallaIncial implements OnInit {
 
   // Redirige a la pantalla de la grilla de locales aplicando el filtro
   filtrarLocales(estado: string): void {
-    this.router.navigate(['/mis-locales'], { queryParams: { filtro: estado } });
+    this.router.navigate(['/panel-dueno/lugares'], { queryParams: { filtro: estado } });
   }
 
   // Función original que pediste conservar
