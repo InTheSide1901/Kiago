@@ -32,15 +32,15 @@ export const routes: Routes = [
   { path: 'search', component: Search },
   // --- RUTAS PARA TURISTAS (Protegidas por turistaGuard) ---
   { path: 'favoritos', component: Favoritos, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria', component: InicioCategoria, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle, canActivate: [turistaGuard] },
+  { path: 'inicio/categoria', component: InicioCategoria},
+  { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle},
   { path: 'prueba', component: Prueba, canActivate: [turistaGuard] },
   { path: 'comentario', component: Comentario, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle, canActivate: [turistaGuard] },
-  { path: 'sobreNosotros', component: SobreNosotros, canActivate: [turistaGuard] },
+  { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle},
+  { path: 'sobreNosotros', component: SobreNosotros},
   { path: 'inicio/perfil', component: Perfil, canActivate: [turistaGuard] },
   { path: 'misAprovaciones', component: MisAprovaciones, canActivate: [turistaGuard] },
-  { path: 'contactanos', component: Contactanos, canActivate: [turistaGuard] },
+  { path: 'contactanos', component: Contactanos},
   { path: 'solicitud', component: SolicitudLocal, canActivate: [turistaGuard] },
 
   // --- RUTAS PARA ADMINISTRADORES (Protegidas por adminGuard) ---
