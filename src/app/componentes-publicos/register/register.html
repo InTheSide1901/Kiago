@@ -1,56 +1,138 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md space-y-6">
-    <h2 class="text-2xl font-bold text-center text-gray-900">Crear Cuenta</h2>
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-[#f3f4f6] py-12 px-4 sm:px-6 lg:px-8">
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+  <div class="max-w-md w-full bg-white p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-100 space-y-7">
+
+    <!-- Encabezado -->
+    <div class="text-center space-y-2">
+      <div class="mx-auto w-14 h-14 flex items-center justify-center rounded-2xl bg-green-50 text-kiago-principal">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+        </svg>
+      </div>
+
+      <h2 class="text-3xl font-extrabold text-gray-900">Crear cuenta</h2>
+      <p class="text-sm text-gray-500">Completá tus datos para comenzar.</p>
+    </div>
+
+    <!-- Error general -->
+    @if (errorMessage() !== null) {
+    <div class="flex items-start gap-3 p-4 rounded-xl border border-red-200 bg-red-50 text-red-700 shadow-sm"
+      role="alert">
+
+      <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v3m0 4h.01m-7.93 4h15.86A2 2 0 0022 18L14 4a2 2 0 00-3.46 0l-8 14A2 2 0 004.27 20z" />
+      </svg>
+
+      <div>
+        <p class="text-sm font-bold">No se pudo crear la cuenta</p>
+        <p class="text-sm mt-1">{{ errorMessage() }}</p>
+      </div>
+    </div>
+    }
+
+    <!-- Formulario -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+
+      <!-- Nombre y apellido -->
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700">Nombre</label>
-          <input 
-            type="text" 
-            formControlName="nombre" 
-            class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Diego">
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Nombre</label>
+          <input type="text" formControlName="nombre" placeholder="Diego"
+            class="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm outline-none transition focus:border-[#437a48] focus:ring-2 focus:ring-[#437a48]/20">
         </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-700">Apellido</label>
-          <input 
-            type="text" 
-            formControlName="apellido" 
-            class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Pérez">
+          <label class="block text-sm font-semibold text-gray-700 mb-1.5">Apellido</label>
+          <input type="text" formControlName="apellido" placeholder="Pérez"
+            class="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm outline-none transition focus:border-[#437a48] focus:ring-2 focus:ring-[#437a48]/20">
         </div>
       </div>
 
+      @if (
+      (registerForm.controls['nombre']?.touched && registerForm.controls['nombre']?.invalid) ||
+      (registerForm.controls['apellido']?.touched && registerForm.controls['apellido']?.invalid)
+      ) {
+      <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        @if (
+        registerForm.controls['nombre']?.invalid &&
+        registerForm.controls['apellido']?.invalid &&
+        registerForm.controls['nombre']?.touched &&
+        registerForm.controls['apellido']?.touched
+        ) {
+        El nombre y apellido son necesarios.
+        } @else if (
+        registerForm.controls['nombre']?.invalid &&
+        registerForm.controls['nombre']?.touched
+        ) {
+        El nombre es necesario.
+        } @else if (
+        registerForm.controls['apellido']?.invalid &&
+        registerForm.controls['apellido']?.touched
+        ) {
+        El apellido es necesario.
+        }
+      </div>
+      }
+
+      <!-- Correo -->
       <div>
-        <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-        <input 
-          type="email" 
-          formControlName="email" 
-          class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="correo@ejemplo.com">
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Correo electrónico</label>
+        <input type="email" formControlName="email" placeholder="correo@ejemplo.com"
+          class="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm outline-none transition focus:border-[#437a48] focus:ring-2 focus:ring-[#437a48]/20">
+
+        @if (
+        registerForm.controls['email']?.touched &&
+        registerForm.controls['email']?.invalid
+        ) {
+        <div class="mt-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          @if (registerForm.controls['email']?.errors?.['required']) {
+          El correo es obligatorio.
+          } @else if (registerForm.controls['email']?.errors?.['email']) {
+          Ingresá un correo válido.
+          }
+        </div>
+        }
       </div>
 
+      <!-- Contraseña -->
       <div>
-        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-        <input 
-          type="password" 
-          formControlName="password" 
-          class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="••••••••">
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">Contraseña</label>
+        <input type="password" formControlName="password" placeholder="••••••••"
+          class="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm outline-none transition focus:border-[#437a48] focus:ring-2 focus:ring-[#437a48]/20">
+
+        @if (
+        registerForm.controls['password']?.touched &&
+        registerForm.controls['password']?.invalid
+        ) {
+        <div class="mt-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          @if (registerForm.controls['password']?.errors?.['required']) {
+          La contraseña es obligatoria.
+          } @else if (registerForm.controls['password']?.errors?.['minlength']) {
+          La contraseña debe tener al menos 6 caracteres.
+          }
+        </div>
+        }
       </div>
 
-      <button 
-        type="submit" 
-        [disabled]="registerForm.invalid"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md disabled:bg-gray-400 transition">
-        Registrarse
+      <!-- Botón -->
+      <button type="submit" [disabled]="registerForm.invalid"
+        class="w-full bg-kiago-principal hover:bg-[#437a48] text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed transition-all duration-200">
+        Crear cuenta
       </button>
+
     </form>
 
-    <p class="text-sm text-center text-gray-600">
-      ¿Ya tienes cuenta? 
-      <a routerLink="/login" class="text-emerald-600 hover:underline font-semibold">Inicia sesión</a>
-    </p>
+    <!-- Login -->
+    <div class="text-center pt-2 border-t border-gray-100">
+      <p class="text-sm text-gray-500">
+        ¿Ya tenés cuenta?
+        <a routerLink="/login" class="text-kiago-principal hover:text-[#437a48] font-bold hover:underline transition">
+          Iniciá sesión
+        </a>
+      </p>
+    </div>
+
   </div>
 </div>

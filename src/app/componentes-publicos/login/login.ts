@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -13,6 +13,8 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  errorMessage = signal(null);
 
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -50,7 +52,7 @@ export class Login {
       },
       error: (err) => {
         console.error(err);
-        alert('Credenciales incorrectas');
+        this.errorMessage.set(err.error?.message || 'Error al iniciar sesión');
       }
     });
   }

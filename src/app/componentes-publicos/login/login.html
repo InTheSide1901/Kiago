@@ -1,37 +1,78 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-md space-y-6">
-    <h2 class="text-2xl font-bold text-center text-gray-900">Iniciar Sesión</h2>
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-[#f3f4f6] py-12 px-4 sm:px-6 lg:px-8">
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
-        <input 
-          type="email" 
-          formControlName="email" 
-          class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="correo@ejemplo.com">
+  <div class="max-w-md w-full bg-white p-8 sm:p-10 rounded-2xl shadow-xl border border-gray-100 space-y-7">
+
+    <!-- Encabezado -->
+    <div class="text-center space-y-2">
+      <div class="mx-auto w-14 h-14 flex items-center justify-center rounded-2xl bg-green-50 text-kiago-principal">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+        </svg>
       </div>
 
+      <h2 class="text-3xl font-extrabold text-gray-900">Iniciar Sesión</h2>
+      <p class="text-sm text-gray-500">Ingresá a tu cuenta de KIAGO</p>
+    </div>
+
+    <!-- Error general -->
+    @if (errorMessage() !== null) {
+    <div class="flex items-start gap-3 p-4 rounded-xl border border-red-200 bg-red-50 text-red-700 shadow-sm"
+      role="alert">
+
+      <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v3m0 4h.01m-7.93 4h15.86A2 2 0 0022 18L14 4a2 2 0 00-3.46 0l-8 14A2 2 0 004.27 20z" />
+      </svg>
+
       <div>
-        <label class="block text-sm font-medium text-gray-700">Contraseña</label>
-        <input 
-          type="password" 
-          formControlName="password" 
-          class="mt-1 w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="••••••••">
+        <p class="text-sm font-bold">No se pudo iniciar sesión</p>
+        <p class="text-sm mt-1">{{ errorMessage() }}</p>
+      </div>
+    </div>
+    }
+
+    <!-- Formulario -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+
+      <!-- Correo -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+          Correo electrónico
+        </label>
+
+        <input type="email" formControlName="email" placeholder="correo@ejemplo.com"
+          class="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm outline-none transition focus:border-[#437a48] focus:ring-2 focus:ring-[#437a48]/20">
       </div>
 
-      <button 
-        type="submit" 
-        [disabled]="loginForm.invalid"
-        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md disabled:bg-gray-400 transition">
+      <!-- Contraseña -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1.5">
+          Contraseña
+        </label>
+
+        <input type="password" formControlName="password" placeholder="••••••••"
+          class="w-full border border-gray-200 rounded-xl px-3 py-3 text-sm outline-none transition focus:border-[#437a48] focus:ring-2 focus:ring-[#437a48]/20">
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" [disabled]="loginForm.invalid"
+        class="w-full bg-kiago-principal hover:bg-[#437a48] text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg disabled:bg-gray-300 disabled:shadow-none disabled:cursor-not-allowed transition-all duration-200">
         Ingresar
       </button>
+
     </form>
 
-    <p class="text-sm text-center text-gray-600">
-      ¿No tienes una cuenta aún? 
-      <a routerLink="/register" class="text-emerald-600 hover:underline font-semibold">Regístrate</a>
-    </p>
+    <!-- Registro -->
+    <div class="text-center pt-2 border-t border-gray-100">
+      <p class="text-sm text-gray-500">
+        ¿Todavía no tenés una cuenta?
+        <a routerLink="/register" class="text-kiago-principal hover:text-[#437a48] font-bold hover:underline transition">
+          Registrate
+        </a>
+      </p>  
+    </div>
+
+
   </div>
 </div>
