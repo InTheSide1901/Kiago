@@ -1,0 +1,147 @@
+<div class="mis-visitas">
+
+  <h3 class="titulo-seccion">Mis visitas</h3>
+
+  <div class="calendario-contenedor">
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+
+</div>
+
+<div class="lugares-seccion">
+
+  <h3 class="titulo-seccion">Agendados</h3>
+
+  <div class="lista-lugares">
+
+    @if (cargando) {
+
+      <p class="lista-vacia">Cargando tus lugares agendados...</p>
+
+    } @else if (errorCarga) {
+
+      <p class="lista-vacia" role="alert">{{ errorCarga }}</p>
+
+    } @else {
+
+      @for (visita of visitas; track visita.agenda_id) {
+
+        <div class="lugar-programado">
+
+          <div class="lugar-icono">
+            @if (visita.imagen) {
+              <img class="lugar-foto" [src]="visita.imagen" [alt]="visita.nombre_local" />
+            } @else {
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M12 22s8-7.2 8-13a8 8 0 1 0-16 0c0 5.8 8 13 8 13Zm0-10.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
+              </svg>
+            }
+          </div>
+
+          <div class="lugar-info">
+            <div class="lugar-nombre">
+              {{ visita.nombre_local }}
+            </div>
+
+            <div class="lugar-reputacion">
+              @if (visita.reputacion !== null && visita.reputacion !== undefined) {
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="m12 2.5 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.5Z" />
+                </svg>
+                {{ visita.reputacion }}
+              } @else {
+                <span>Sin reseñas</span>
+              }
+            </div>
+          </div>
+
+          <div class="fecha-etiqueta">
+            {{ formatearFecha(visita.fecha_visita) }}
+          </div>
+
+          <button
+            type="button"
+            class="btn-eliminar"
+            aria-label="Eliminar visita"
+            title="Eliminar visita"
+            (click)="solicitarEliminar(visita.agenda_id)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 6h18M8 6V4h8v2m2 0-1 14H7L6 6m4 4v6m4-6v6" />
+            </svg>
+          </button>
+
+        </div>
+
+      } @empty {
+
+        <p class="lista-vacia">
+          No tenés lugares agendados.
+        </p>
+
+      }
+
+    }
+
+  </div>
+
+</div>
+
+@if (visitaPendienteEliminar) {
+
+  <div class="modal-fondo" (click)="cancelarEliminar()">
+
+    <div
+      class="modal-confirmacion"
+      role="alertdialog"
+      aria-modal="true"
+      aria-labelledby="titulo-confirmacion"
+      (click)="$event.stopPropagation()">
+
+      <div class="modal-icono">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 6h18M8 6V4h8v2m2 0-1 14H7L6 6m4 4v6m4-6v6" />
+        </svg>
+      </div>
+
+      <h3 id="titulo-confirmacion">
+        ¿Eliminar visita?
+      </h3>
+
+      <p>
+        ¿Estás seguro de que querés eliminar la visita a
+        <strong>{{ visitaPendienteEliminar.nombre_local }}</strong>?
+      </p>
+
+      <p class="modal-aviso">
+        El lugar se quitará de la lista y del calendario.
+      </p>
+
+      @if (errorEliminar) {
+        <p class="modal-error" role="alert">{{ errorEliminar }}</p>
+      }
+
+      <div class="modal-acciones">
+
+        <button
+          type="button"
+          class="btn-rechazar"
+          [disabled]="eliminando"
+          (click)="cancelarEliminar()">
+          Rechazar
+        </button>
+
+        <button
+          type="button"
+          class="btn-confirmar"
+          [disabled]="eliminando"
+          (click)="confirmarEliminar()">
+          {{ eliminando ? 'Eliminando...' : 'Confirmar' }}
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

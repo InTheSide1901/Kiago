@@ -1,8 +1,9 @@
-<div class="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 font-sans">
-      <div class="max-w-3xl mx-auto">
+<div class="min-h-screen bg-gray-50 px-4 py-12 font-sans sm:px-6 lg:px-10">
+      <div class="mx-auto grid max-w-7xl grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-10 xl:gap-12">
+        <section class="min-w-0 space-y-8">
         
         <!-- Header del Perfil -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden mb-6">
+        <div class="overflow-hidden rounded-3xl border border-gray-200/80 bg-white shadow-md shadow-gray-200/50">
           <!-- Banner Superior -->
           <div class="h-32 bg-gradient-to-r from-kiago-principal to-gray-900"></div>
           
@@ -11,12 +12,13 @@
             <div class="relative -mt-16 mb-4 flex justify-between items-end">
               <div class="w-32 h-32 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-md shrink-0">
                 <img 
-                  [src]="usuario?.foto_perfil || 'assets/default-avatar.png'" 
+                  [src]="usuario?.foto_perfil || '/images/LogoSinFondo-256.png'"
+                  (error)="usarLogoComoFotoAlternativa($event)"
                   [alt]="usuario?.nombre" 
-                  class="w-full h-full object-cover"
+                  class="w-full h-full bg-white object-contain p-2"
                 />
               </div>
-              <button class="bg-kiago-principal hover:bg-kiago-hover text-white px-5 py-2.5 rounded-full font-medium text-sm transition-colors shadow-sm">
+              <button type="button" (click)="abrirEdicion()" class="bg-kiago-principal hover:bg-kiago-hover text-white px-5 py-2.5 rounded-full font-medium text-sm transition-colors shadow-sm">
                 Editar Perfil
               </button>
             </div>
@@ -39,12 +41,12 @@
         </div>
 
         <!-- Tarjeta de Información Personal -->
-        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 sm:p-10">
+        <div class="rounded-3xl border border-gray-200/80 bg-white p-6 shadow-md shadow-gray-200/50 sm:p-8 lg:p-9">
           <h2 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4">
             Información de Contacto
           </h2>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="grid grid-cols-1 gap-6">
             
             <!-- Email -->
             <div>
@@ -89,7 +91,7 @@
         </div>
 
         <!-- Acciones de sesión -->
-        <div class="mt-6 flex justify-end">
+        <div class="flex justify-end">
           <button (click)="cerrarSesion()" class="text-red-500 hover:text-red-700 font-semibold flex items-center gap-2 transition-colors px-4 py-2 hover:bg-red-50 rounded-xl">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -98,5 +100,48 @@
           </button>
         </div>
 
-      </div>
+        </section>
+
+        <aside class="min-w-0 rounded-3xl border border-gray-200/80 bg-white p-5 shadow-md shadow-gray-200/50 sm:p-7 lg:p-8">
+          <app-agenda-visitas/>
+        </aside>
     </div>
+
+    @if (modalEdicionAbierto) {
+      <div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" (click)="cancelarEdicion()">
+        <section class="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl sm:p-8" role="dialog" aria-modal="true" aria-labelledby="editar-perfil-titulo" (click)="$event.stopPropagation()">
+          <h2 id="editar-perfil-titulo" class="text-2xl font-bold text-gray-900">Editar perfil</h2>
+          <p class="mt-1 text-sm text-gray-500">Actualiza tu nombre, apellido, teléfono o foto.</p>
+
+          <div class="mt-6 flex items-center gap-4">
+            <img [src]="vistaPreviaFoto || '/images/LogoSinFondo-256.png'" (error)="usarLogoComoFotoAlternativa($event)" alt="Vista previa de la foto de perfil" class="h-20 w-20 rounded-full border border-gray-200 bg-white object-contain p-2" />
+            <label class="cursor-pointer rounded-xl border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+              Elegir foto
+              <input class="sr-only" type="file" accept="image/jpeg,image/png,image/webp" (change)="seleccionarFoto($event)" />
+            </label>
+            <span class="text-xs text-gray-500">JPG, PNG o WEBP · máx. 5 MB</span>
+          </div>
+
+          <div class="mt-5 space-y-4">
+            <label class="block text-sm font-semibold text-gray-700">Nombre <span class="text-red-500">*</span>
+              <input [(ngModel)]="nombreEdicion" name="nombreEdicion" required maxlength="100" class="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 font-normal outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" />
+            </label>
+            <label class="block text-sm font-semibold text-gray-700">Apellido <span class="text-red-500">*</span>
+              <input [(ngModel)]="apellidoEdicion" name="apellidoEdicion" required maxlength="100" class="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 font-normal outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" />
+            </label>
+            <label class="block text-sm font-semibold text-gray-700">Teléfono <span class="font-normal text-gray-400">(opcional)</span>
+              <input [(ngModel)]="telefonoEdicion" name="telefonoEdicion" maxlength="30" type="tel" class="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 font-normal outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100" />
+            </label>
+          </div>
+
+          @if (errorEdicion) {
+            <p class="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">{{ errorEdicion }}</p>
+          }
+
+          <div class="mt-7 flex justify-end gap-3">
+            <button type="button" (click)="cancelarEdicion()" [disabled]="guardando" class="rounded-xl border border-gray-300 px-5 py-2.5 font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50">Cancelar</button>
+            <button type="button" (click)="guardarPerfil()" [disabled]="guardando" class="rounded-xl bg-kiago-principal px-5 py-2.5 font-semibold text-white hover:bg-kiago-hover disabled:opacity-50">{{ guardando ? 'Guardando…' : 'Guardar cambios' }}</button>
+          </div>
+        </section>
+      </div>
+    }

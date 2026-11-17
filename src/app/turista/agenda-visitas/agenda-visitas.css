@@ -1,0 +1,545 @@
+/* ========================================
+   SECCIONES
+   ======================================== */
+
+.mis-visitas,
+.lugares-seccion {
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.titulo-seccion {
+  margin: 0 0 18px;
+  color: #292421;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.7px;
+}
+
+
+/* ========================================
+   CALENDARIO
+   ======================================== */
+
+.calendario-contenedor {
+  width: 100%;
+  padding: 18px;
+  margin-bottom: 18px;
+  overflow: hidden;
+
+  background: #ede6f1;
+  border: 1px solid #e8dfed;
+  border-radius: 22px;
+
+  color: #292421;
+}
+
+/* FullCalendar */
+
+:host ::ng-deep full-calendar {
+  display: block;
+  width: 100%;
+}
+
+/* Encabezado y título */
+
+:host ::ng-deep .fc .fc-toolbar {
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+:host ::ng-deep .fc .fc-toolbar-title {
+  color: #292421;
+  font-size: 23px;
+  font-weight: 600;
+}
+
+:host ::ng-deep .fc .fc-button {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  color: #6750a4;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+:host ::ng-deep .fc .fc-button:hover,
+:host ::ng-deep .fc .fc-button:active,
+:host ::ng-deep .fc .fc-button:focus {
+  background: #ded2e8;
+  color: #57408f;
+  box-shadow: none;
+}
+
+:host ::ng-deep .fc .fc-button:disabled {
+  opacity: 0.45;
+}
+
+/* Días de la semana */
+
+:host ::ng-deep .fc .fc-col-header-cell {
+  padding: 10px 0;
+  background: transparent;
+  border-color: #d9cfdf;
+}
+
+:host ::ng-deep .fc .fc-col-header-cell-cushion {
+  color: #514958;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Celdas: bordes suaves */
+
+:host ::ng-deep .fc-theme-standard td,
+:host ::ng-deep .fc-theme-standard th {
+  border-color: #d9cfdf;
+}
+
+:host ::ng-deep .fc .fc-daygrid-day {
+  background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+:host ::ng-deep .fc .fc-daygrid-day:hover {
+  background: #e4d9eb;
+}
+
+:host ::ng-deep .fc .fc-daygrid-day-frame {
+  min-height: 58px;
+}
+
+:host ::ng-deep .fc .fc-daygrid-day-number {
+  padding: 8px;
+  color: #292421;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+/* Día actual */
+
+:host ::ng-deep .fc .fc-day-today {
+  background: #e3d8ed !important;
+}
+
+:host ::ng-deep .fc .fc-day-today .fc-daygrid-day-number {
+  color: #6750a4;
+  font-weight: 800;
+}
+
+/* Eventos del calendario */
+
+:host ::ng-deep .fc .fc-daygrid-event {
+  border: none;
+  border-radius: 5px;
+  background: #6750a4;
+  color: #ffffff;
+  font-size: 11px;
+}
+
+/* Ocultar la línea inferior predeterminada si no se necesita */
+
+:host ::ng-deep .fc .fc-scrollgrid {
+  border: none;
+}
+
+:host ::ng-deep .fc .fc-daygrid-body {
+  border-top: 1px solid #d9cfdf;
+}
+
+
+/* ========================================
+   LISTA DE LUGARES AGENDADOS
+   ======================================== */
+
+.lugares-seccion {
+  margin-top: 14px;
+}
+
+.lugares-seccion .titulo-seccion {
+  margin-left: 8px;
+  margin-bottom: 12px;
+}
+
+.lista-lugares {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Fila individual */
+
+.lugar-programado {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  min-height: 88px;
+  padding: 12px 16px;
+
+  background: #ffffff;
+  border: 1px solid #eee6dd;
+  border-radius: 14px;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.lugar-programado:hover {
+  background: #fcfaf7;
+  border-color: #d8e6d7;
+  transform: translateY(-1px);
+}
+
+/* Icono del lugar */
+
+.lugar-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 54px;
+  height: 54px;
+
+  overflow: hidden;
+
+  color: #315f2d;
+  background: #edf4ed;
+  border-radius: 11px;
+}
+
+.lugar-icono svg {
+  width: 25px;
+  height: 25px;
+}
+
+.lugar-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Información */
+
+.lugar-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lugar-nombre {
+  margin-bottom: 7px;
+  overflow-wrap: anywhere;
+
+  color: #302923;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+}
+
+.lugar-reputacion {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #77716d;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lugar-reputacion svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: #d79524;
+}
+
+/* Etiqueta de fecha */
+
+.fecha-etiqueta {
+  flex-shrink: 0;
+  min-width: 76px;
+  padding: 10px 12px;
+
+  color: #315f2d;
+  background: #edf4ef;
+  border-radius: 11px;
+
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .mis-visitas,
+  .lugares-seccion {
+    max-width: 100%;
+  }
+
+  .titulo-seccion {
+    font-size: 25px;
+  }
+
+  .calendario-contenedor {
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  :host ::ng-deep .fc .fc-toolbar-title {
+    font-size: 19px;
+  }
+
+  :host ::ng-deep .fc .fc-daygrid-day-frame {
+    min-height: 44px;
+  }
+
+  :host ::ng-deep .fc .fc-daygrid-day-number {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .lugar-programado {
+    gap: 10px;
+    min-height: 78px;
+    padding: 10px;
+  }
+
+  .lugar-icono {
+    width: 44px;
+    height: 44px;
+  }
+
+  .lugar-icono svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .lugar-nombre {
+    font-size: 15px;
+  }
+
+  .fecha-etiqueta {
+    min-width: auto;
+    padding: 8px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  .fecha-etiqueta {
+    max-width: 70px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .lugar-programado {
+    gap: 8px;
+    padding: 9px;
+  }
+}
+
+/* ========================================
+   BOTÓN ELIMINAR VISITA
+   ======================================== */
+
+.btn-eliminar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  width: 40px;
+  height: 40px;
+
+  color: #b42318;
+  background: #fff1f0;
+  border: none;
+  border-radius: 10px;
+
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-eliminar svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-eliminar:hover {
+  background: #ffe0dd;
+  transform: scale(1.05);
+}
+
+.btn-eliminar:focus-visible {
+  outline: 2px solid #b42318;
+  outline-offset: 3px;
+}
+
+/* Lista vacía */
+
+.lista-vacia {
+  padding: 18px 4px;
+  color: #77716d;
+  text-align: center;
+}
+
+/* ========================================
+   MODAL DE CONFIRMACIÓN
+   ======================================== */
+
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+  background: rgba(11, 19, 41, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.modal-confirmacion {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 16px 48px rgba(11, 19, 41, 0.2);
+
+  text-align: center;
+  animation: modal-aparecer 0.2s ease-out;
+}
+
+.modal-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+
+  color: #b42318;
+  background: #fff1f0;
+  border-radius: 50%;
+}
+
+.modal-icono svg {
+  width: 24px;
+  height: 24px;
+}
+
+.modal-confirmacion h3 {
+  margin: 0 0 12px;
+  color: #292421;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.modal-confirmacion p {
+  margin: 0 0 12px;
+  color: #514958;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.modal-confirmacion strong {
+  color: #292421;
+}
+
+.modal-confirmacion .modal-aviso {
+  margin-bottom: 24px;
+  color: #77716d;
+  font-size: 13px;
+}
+
+.modal-confirmacion .modal-error {
+  color: #b42318;
+  font-size: 13px;
+}
+
+.modal-acciones {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn-rechazar,
+.btn-confirmar {
+  flex: 1;
+  min-height: 44px;
+  padding: 10px 16px;
+
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-rechazar {
+  color: #514958;
+  background: #ffffff;
+  border: 1px solid #d9cfdf;
+}
+
+.btn-rechazar:hover {
+  background: #f5f1f7;
+}
+
+.btn-confirmar {
+  color: #ffffff;
+  background: #b42318;
+  border: 1px solid #b42318;
+}
+
+.btn-confirmar:hover {
+  background: #8f1c13;
+}
+
+@keyframes modal-aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Adaptación para móviles */
+
+@media (max-width: 400px) {
+  .btn-eliminar {
+    width: 34px;
+    height: 34px;
+  }
+
+  .modal-confirmacion {
+    padding: 22px 18px;
+  }
+
+  .modal-acciones {
+    gap: 8px;
+  }
+}

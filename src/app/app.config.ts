@@ -7,7 +7,6 @@ import { jwtInterceptor } from './interceptor/jwt.interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(),
     provideRouter(routes),
     provideHttpClient(withInterceptors([jwtInterceptor])),
     provideClientHydration(),
