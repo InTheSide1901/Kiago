@@ -7,7 +7,6 @@ import { Register } from './componentes-publicos/register/register';
 import { Login } from './componentes-publicos/login/login';
 import { Comentario } from './turista/comentario/comentario';
 import { SolicitudLocal } from './turista/solicitud-local/solicitud-local';
-import { InicioAdmin } from './administrador/inicio/inicio';
 import { Favoritos } from './turista/favoritos/favoritos';
 import { SobreNosotros } from './turista/sobre-nosotros/sobre-nosotros';
 import { Perfil } from './turista/perfil/perfil';
@@ -44,7 +43,19 @@ export const routes: Routes = [
   { path: 'solicitud', component: SolicitudLocal, canActivate: [turistaGuard] },
 
   // --- RUTAS PARA ADMINISTRADORES (Protegidas por adminGuard) ---
-  { path: 'admin', component: InicioAdmin, canActivate: [adminGuard] },
+  // Registro de admin
+  {
+    path: 'admin/registro',
+    title: 'Registro Admin',
+    loadComponent: () =>
+      import('./administrador/registro/registro-admin.component').then((m) => m.RegistroAdminComponent),
+  },
+  // Toda la información relacionada con el panel de administración se encuentra en admin.routes.ts y protegido por adminGuard
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    loadChildren: () => import('./administrador/admin.routes').then((m) => m.ADMIN_ROUTES),
+  },
 
   // --- RUTAS PARA DUEÑOS (Futuro) ---
   { path: 'panel-dueno', component: PantallaIncial, canActivate: [duenoGuard] },
