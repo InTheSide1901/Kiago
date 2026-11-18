@@ -154,7 +154,109 @@
         </div>
 
         <div class="md:col-span-2 pt-4 border-t border-gray-200 mt-2">
-          <h3 class="text-sm font-bold text-gray-700 mb-4">Ubicación</h3>
+          <h3 class="text-sm font-bold text-gray-700 mb-1">Ubicación</h3>
+          <p class="text-xs text-gray-400">Escribí la calle y la altura y elegí la dirección de la lista.</p>
+        </div>
+
+        <!-- Buscador de dirección con autocompletado -->
+        <div class="md:col-span-2 relative">
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Dirección</label
+          >
+          <div class="relative">
+            <svg
+              class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <input
+              #inputDireccion
+              type="text"
+              autocomplete="off"
+              [value]="direccionTexto"
+              (input)="onDireccionInput($event)"
+              (keydown)="onDireccionKeydown($event)"
+              (blur)="onDireccionBlur()"
+              (focus)="onDireccionFocus()"
+              role="combobox"
+              aria-autocomplete="list"
+              [attr.aria-expanded]="mostrarSugerencias"
+              class="w-full bg-gray-100 text-gray-800 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+              [class.ring-2]="direccionConfirmada"
+              [class.ring-green-500]="direccionConfirmada"
+              placeholder="Ej: Av. Corrientes 1234"
+            />
+            <!-- Spinner / check / limpiar -->
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+              <svg
+                *ngIf="buscandoDireccion"
+                class="w-5 h-5 text-indigo-500 animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <button
+                *ngIf="!buscandoDireccion && direccionTexto"
+                type="button"
+                (mousedown)="$event.preventDefault()"
+                (click)="limpiarDireccion()"
+                class="text-gray-400 hover:text-gray-600"
+                title="Borrar dirección"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Lista de sugerencias -->
+          <ul
+            *ngIf="mostrarSugerencias"
+            role="listbox"
+            class="absolute z-30 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden max-h-72 overflow-y-auto"
+          >
+            <li
+              *ngFor="let s of sugerencias; let i = index"
+              role="option"
+              [attr.aria-selected]="i === indiceActivo"
+              (mousedown)="$event.preventDefault()"
+              (click)="seleccionarSugerencia(s)"
+              (mouseenter)="indiceActivo = i"
+              class="flex items-start gap-3 px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0"
+              [class.bg-indigo-50]="i === indiceActivo"
+            >
+              <svg class="w-5 h-5 mt-0.5 shrink-0" [class.text-indigo-500]="s.tipo === 'direccion'" [class.text-gray-400]="s.tipo === 'calle'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <div class="min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate">
+                  {{ s.calle }}<span *ngIf="s.altura !== null"> {{ s.altura }}</span>
+                </p>
+                <p class="text-xs text-gray-500 truncate">
+                  {{ s.detalle }}<span *ngIf="s.tipo === 'calle'"> · agregá la altura</span>
+                </p>
+              </div>
+            </li>
+            <li
+              *ngIf="sugerencias.length === 0 && !buscandoDireccion"
+              class="px-4 py-3 text-sm text-gray-500"
+            >
+              No encontramos esa dirección. Probá con otra forma de escribirla.
+            </li>
+          </ul>
+
+          <p *ngIf="mensajeDireccion" class="text-xs text-indigo-600 mt-1">{{ mensajeDireccion }}</p>
+          <p *ngIf="direccionConfirmada" class="text-xs text-green-600 mt-1">
+            ✓ Dirección encontrada y coordenadas guardadas
+          </p>
         </div>
 
         <div>
@@ -165,11 +267,12 @@
             formControlName="ciudad_id"
             class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition appearance-none"
           >
-            <option value="" disabled selected>Seleccioná ciudad...</option>
+            <option value="" disabled>Seleccioná ciudad...</option>
             <option *ngFor="let c of ciudades" [value]="c.id">{{ c.nombre }}</option>
           </select>
         </div>
 
+        <!-- Se completan solos al elegir una sugerencia -->
         <div class="flex gap-3">
           <div class="w-2/3">
             <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
@@ -178,8 +281,9 @@
             <input
               type="text"
               formControlName="calle"
-              class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
-              placeholder="Av. Corrientes"
+              readonly
+              class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+              placeholder="Se completa solo"
             />
           </div>
           <div class="w-1/3">
@@ -189,28 +293,11 @@
             <input
               type="number"
               formControlName="altura"
-              class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
-              placeholder="1234"
+              readonly
+              class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+              placeholder="—"
             />
           </div>
-        </div>
-
-        <!-- Buscador de coordenadas para el mapa -->
-        <div
-          class="flex items-center gap-3 mb-4 p-4 bg-white rounded-2xl shadow-sm border border-gray-200"
-        >
-          <input
-            type="text"
-            [(ngModel)]="direccionBuscada"
-            placeholder="Ej: Avenida 9 de Julio, Buenos Aires"
-            class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#5cb85c]"
-          />
-          <button
-            (click)="obtenerCoordenadas()"
-            class="px-6 py-2 bg-[#5cb85c] hover:bg-[#479E47] text-white font-semibold rounded-xl transition-colors whitespace-nowrap"
-          >
-            Buscar Coordenadas
-          </button>
         </div>
 
         <div>
@@ -220,8 +307,9 @@
           <input
             type="text"
             formControlName="latitud"
-            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
-            placeholder="-34.6037"
+            readonly
+            class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+            placeholder="Se completa solo"
           />
         </div>
 
@@ -232,8 +320,9 @@
           <input
             type="text"
             formControlName="longitud"
-            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
-            placeholder="-58.3815"
+            readonly
+            class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+            placeholder="Se completa solo"
           />
         </div>
 
