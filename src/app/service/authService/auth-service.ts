@@ -20,47 +20,49 @@ export class AuthService {
   // 2. Signal inicializado con el valor recuperado del localStorage
   currentUser = signal<any>(this.getUsuarioFromStorage());
 
-  register(datos: { nombre: string; apellido: string; email: string; password: string; telefono?: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register`, datos).pipe(
-      tap(res => {
-        if (res.token && res.usuario) {
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('usuario', JSON.stringify(res.usuario));
-          // Actualizamos la Signal en tiempo real
-          this.currentUser.set(res.usuario);
-        }
-      })
-    );
-  }
+    //register(datos: { nombre: string; apellido: string; email: string; password: string; telefono?: string }): Observable<any> {
+    //Agrego el parámetro opcional rol_id al método register para poder darle un rol al usuario al momento de registrarse
+    register(datos: { nombre: string; apellido: string; email: string; password: string; telefono?: string; rol_id?: number }): Observable < any > {
+      return this.http.post<any>(`${this.apiUrl}/register`, datos).pipe(
+        tap(res => {
+          if (res.token && res.usuario) {
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('usuario', JSON.stringify(res.usuario));
+            // Actualizamos la Signal en tiempo real
+            this.currentUser.set(res.usuario);
+          }
+        })
+      );
+    }
 
-  login(credenciales: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, credenciales).pipe(
-      tap(res => {
-        if (res.token && res.usuario) {
-          localStorage.setItem('token', res.token);
-          localStorage.setItem('usuario', JSON.stringify(res.usuario));
-          // Actualizamos la Signal en tiempo real
-          this.currentUser.set(res.usuario);
-        }
-      })
-    );
-  }
+    login(credenciales: { email: string; password: string }): Observable < any > {
+      return this.http.post<any>(`${this.apiUrl}/login`, credenciales).pipe(
+        tap(res => {
+          if (res.token && res.usuario) {
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('usuario', JSON.stringify(res.usuario));
+            // Actualizamos la Signal en tiempo real
+            this.currentUser.set(res.usuario);
+          }
+        })
+      );
+    }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuario');
-    // Notificamos a la Signal que ya no hay usuario logueado
-    this.currentUser.set(null);
-    this.router.navigate(['/login']);
-  }
+    logout(): void {
+      localStorage.removeItem('token');
+      localStorage.removeItem('usuario');
+      // Notificamos a la Signal que ya no hay usuario logueado
+      this.currentUser.set(null);
+      this.router.navigate(['/login']);
+    }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
-  }
+    getToken(): string | null {
+      return localStorage.getItem('token');
+    }
 
-  getUsuario(): any | null {
-    return this.currentUser();
-  }
+    getUsuario(): any | null {
+      return this.currentUser();
+    }
 
   isLoggedIn(): boolean {
     return !!this.getToken();
