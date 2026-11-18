@@ -1,120 +1,340 @@
 <div class="min-h-screen bg-gray-50 flex items-center justify-center p-6">
   <div class="bg-white rounded-2xl shadow-xl max-w-5xl w-full p-8 overflow-hidden">
-    
     <div class="mb-8 text-center">
       <h2 class="text-3xl font-extrabold text-gray-800">Registrá tu Local</h2>
       <p class="text-gray-500 mt-2">Completá los datos para enviar la solicitud a revisión.</p>
     </div>
 
-    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="flex flex-col lg:flex-row gap-10">
-      
+    <form
+      [formGroup]="registroForm"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col lg:flex-row gap-10"
+    >
       <!-- Lado Izquierdo: Foto Principal -->
       <div class="w-full lg:w-1/3 flex flex-col gap-4">
         <label class="block text-sm font-bold text-gray-700">Foto Principal del Negocio</label>
-        
-        <div class="relative w-full h-80 rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 transition-colors flex flex-col items-center justify-center cursor-pointer overflow-hidden group">
-          
-          <input type="file" (change)="onFileSelected($event)" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-          
+
+        <div
+          class="relative w-full h-80 rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 transition-colors flex flex-col items-center justify-center cursor-pointer overflow-hidden group"
+        >
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+          />
+
           <ng-container *ngIf="!imagenPreview">
-            <svg class="w-12 h-12 text-gray-400 mb-3 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            <svg
+              class="w-12 h-12 text-gray-400 mb-3 group-hover:text-indigo-500 transition-colors"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              ></path>
             </svg>
-            <span class="text-sm text-gray-500 font-medium group-hover:text-indigo-500">Subir imagen</span>
+            <span class="text-sm text-gray-500 font-medium group-hover:text-indigo-500"
+              >Subir imagen</span
+            >
             <span class="text-xs text-gray-400 mt-1">PNG, JPG hasta 5MB</span>
           </ng-container>
 
-          <img *ngIf="imagenPreview" [src]="imagenPreview" alt="Vista previa" class="absolute inset-0 w-full h-full object-cover z-0" />
+          <img
+            *ngIf="imagenPreview"
+            [src]="imagenPreview"
+            alt="Vista previa"
+            class="absolute inset-0 w-full h-full object-cover z-0"
+          />
         </div>
       </div>
 
       <!-- Lado Derecho: Datos del Local -->
       <div class="w-full lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-5">
-        
         <div class="md:col-span-2">
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Nombre del Local</label>
-          <input type="text" formControlName="nombre" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="Ej: La Farola" />
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Nombre del Local</label
+          >
+          <input
+            type="text"
+            formControlName="nombre"
+            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+            placeholder="Ej: La Farola"
+          />
         </div>
 
         <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Nombre del Titular</label>
-            <input type="text" formControlName="nombre_titular" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="Ej: Juan" />
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+              >Nombre del Titular</label
+            >
+            <input
+              type="text"
+              formControlName="nombre_titular"
+              class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+              placeholder="Ej: Juan"
+            />
           </div>
           <div>
-            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Apellido del Titular</label>
-            <input type="text" formControlName="apellido" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="Ej: Pérez" />
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+              >Apellido del Titular</label
+            >
+            <input
+              type="text"
+              formControlName="apellido"
+              class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+              placeholder="Ej: Pérez"
+            />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Categoría</label>
-          <select formControlName="categoria_id" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition appearance-none">
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Categoría</label
+          >
+          <select
+            formControlName="categoria_id"
+            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition appearance-none"
+          >
             <option value="" disabled selected>Seleccioná una...</option>
             <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Teléfono</label>
-          <input type="text" formControlName="telefono" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="+54 11..." />
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Teléfono</label
+          >
+          <input
+            type="text"
+            formControlName="telefono"
+            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+            placeholder="+54 11..."
+          />
         </div>
 
         <div class="md:col-span-2">
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Descripción</label>
-          <textarea formControlName="descripcion" rows="3" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition resize-none" placeholder="Breve resumen de tu propuesta..."></textarea>
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Descripción</label
+          >
+          <textarea
+            formControlName="descripcion"
+            rows="3"
+            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition resize-none"
+            placeholder="Breve resumen de tu propuesta..."
+          ></textarea>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Correo Electrónico</label>
-          <input type="email" formControlName="correo_electronico" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="contacto@empresa.com" />
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Correo Electrónico</label
+          >
+          <input
+            type="email"
+            formControlName="correo_electronico"
+            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+            placeholder="contacto@empresa.com"
+          />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Sitio Web</label>
-          <input type="url" formControlName="sitio_web" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="https://..." />
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Sitio Web</label
+          >
+          <input
+            type="url"
+            formControlName="sitio_web"
+            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+            placeholder="https://..."
+          />
         </div>
 
         <div class="md:col-span-2 pt-4 border-t border-gray-200 mt-2">
-          <h3 class="text-sm font-bold text-gray-700 mb-4">Ubicación</h3>
+          <h3 class="text-sm font-bold text-gray-700 mb-1">Ubicación</h3>
+          <p class="text-xs text-gray-400">Escribí la calle y la altura y elegí la dirección de la lista.</p>
+        </div>
+
+        <!-- Buscador de dirección con autocompletado -->
+        <div class="md:col-span-2 relative">
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Dirección</label
+          >
+          <div class="relative">
+            <svg
+              class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            <input
+              #inputDireccion
+              type="text"
+              autocomplete="off"
+              [value]="direccionTexto"
+              (input)="onDireccionInput($event)"
+              (keydown)="onDireccionKeydown($event)"
+              (blur)="onDireccionBlur()"
+              (focus)="onDireccionFocus()"
+              role="combobox"
+              aria-autocomplete="list"
+              [attr.aria-expanded]="mostrarSugerencias"
+              class="w-full bg-gray-100 text-gray-800 rounded-lg pl-10 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition"
+              [class.ring-2]="direccionConfirmada"
+              [class.ring-green-500]="direccionConfirmada"
+              placeholder="Ej: Av. Corrientes 1234"
+            />
+            <!-- Spinner / check / limpiar -->
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+              <svg
+                *ngIf="buscandoDireccion"
+                class="w-5 h-5 text-indigo-500 animate-spin"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+              <button
+                *ngIf="!buscandoDireccion && direccionTexto"
+                type="button"
+                (mousedown)="$event.preventDefault()"
+                (click)="limpiarDireccion()"
+                class="text-gray-400 hover:text-gray-600"
+                title="Borrar dirección"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Lista de sugerencias -->
+          <ul
+            *ngIf="mostrarSugerencias"
+            role="listbox"
+            class="absolute z-30 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden max-h-72 overflow-y-auto"
+          >
+            <li
+              *ngFor="let s of sugerencias; let i = index"
+              role="option"
+              [attr.aria-selected]="i === indiceActivo"
+              (mousedown)="$event.preventDefault()"
+              (click)="seleccionarSugerencia(s)"
+              (mouseenter)="indiceActivo = i"
+              class="flex items-start gap-3 px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0"
+              [class.bg-indigo-50]="i === indiceActivo"
+            >
+              <svg class="w-5 h-5 mt-0.5 shrink-0" [class.text-indigo-500]="s.tipo === 'direccion'" [class.text-gray-400]="s.tipo === 'calle'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <div class="min-w-0">
+                <p class="text-sm font-medium text-gray-800 truncate">
+                  {{ s.calle }}<span *ngIf="s.altura !== null"> {{ s.altura }}</span>
+                </p>
+                <p class="text-xs text-gray-500 truncate">
+                  {{ s.detalle }}<span *ngIf="s.tipo === 'calle'"> · agregá la altura</span>
+                </p>
+              </div>
+            </li>
+            <li
+              *ngIf="sugerencias.length === 0 && !buscandoDireccion"
+              class="px-4 py-3 text-sm text-gray-500"
+            >
+              No encontramos esa dirección. Probá con otra forma de escribirla.
+            </li>
+          </ul>
+
+          <p *ngIf="mensajeDireccion" class="text-xs text-indigo-600 mt-1">{{ mensajeDireccion }}</p>
+          <p *ngIf="direccionConfirmada" class="text-xs text-green-600 mt-1">
+            ✓ Dirección encontrada y coordenadas guardadas
+          </p>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Ciudad</label>
-          <select formControlName="ciudad_id" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition appearance-none">
-            <option value="" disabled selected>Seleccioná ciudad...</option>
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Ciudad</label
+          >
+          <select
+            formControlName="ciudad_id"
+            class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition appearance-none"
+          >
+            <option value="" disabled>Seleccioná ciudad...</option>
             <option *ngFor="let c of ciudades" [value]="c.id">{{ c.nombre }}</option>
           </select>
         </div>
 
+        <!-- Se completan solos al elegir una sugerencia -->
         <div class="flex gap-3">
           <div class="w-2/3">
-            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Calle</label>
-            <input type="text" formControlName="calle" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="Av. Corrientes" />
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+              >Calle</label
+            >
+            <input
+              type="text"
+              formControlName="calle"
+              readonly
+              class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+              placeholder="Se completa solo"
+            />
           </div>
           <div class="w-1/3">
-            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Altura</label>
-            <input type="number" formControlName="altura" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="1234" />
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+              >Altura</label
+            >
+            <input
+              type="number"
+              formControlName="altura"
+              readonly
+              class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+              placeholder="—"
+            />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Latitud</label>
-          <input type="text" formControlName="latitud" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="-34.6037" />
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Latitud</label
+          >
+          <input
+            type="text"
+            formControlName="latitud"
+            readonly
+            class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+            placeholder="Se completa solo"
+          />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Longitud</label>
-          <input type="text" formControlName="longitud" class="w-full bg-gray-100 text-gray-800 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition" placeholder="-58.3815" />
+          <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1"
+            >Longitud</label
+          >
+          <input
+            type="text"
+            formControlName="longitud"
+            readonly
+            class="w-full bg-gray-100 text-gray-600 rounded-lg px-4 py-3 focus:outline-none cursor-not-allowed"
+            placeholder="Se completa solo"
+          />
         </div>
 
         <!-- Botón Enviar -->
         <div class="md:col-span-2 mt-6 flex justify-end">
-          <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transform transition hover:-translate-y-1">
+          <button
+            type="submit"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transform transition hover:-translate-y-1"
+          >
             Enviar Solicitud
           </button>
         </div>
-
       </div>
     </form>
   </div>

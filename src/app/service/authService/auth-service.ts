@@ -64,16 +64,15 @@ export class AuthService {
       return this.currentUser();
     }
 
-    isLoggedIn(): boolean {
-      return !!this.getToken();
-    }
-
-    actualizarPlanLocal(nuevoPlanId: number): void {
-      const usuarioActual = this.currentUser();
-      if (usuarioActual) {
-        const usuarioActualizado = { ...usuarioActual, plan_id: nuevoPlanId };
-        localStorage.setItem('usuario', JSON.stringify(usuarioActualizado));
-        this.currentUser.set(usuarioActualizado);
-      }
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+  actualizarPlanLocal(nuevoPlanId: number): void {
+    const usuarioActual = this.currentUser();
+    if (usuarioActual) {
+      const usuarioActualizado = { ...usuarioActual, plan_id: nuevoPlanId };
+      localStorage.setItem('usuario', JSON.stringify(usuarioActualizado));
+      this.currentUser.set(usuarioActualizado);
     }
   }
+}

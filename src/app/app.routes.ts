@@ -22,6 +22,8 @@ import { PantallaIncial } from './dueno/pantalla-incial/pantalla-incial';
 import { Contactanos } from './turista/contactanos/contactanos';
 import { FormularioDueno } from './dueno/formulario-dueno/formulario-dueno';
 
+import { PerfilComponent } from './dueno/perfil/perfil';
+
 export const routes: Routes = [
   // --- RUTAS PÚBLICAS (No requieren estar logueado) ---
   // { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
@@ -31,15 +33,15 @@ export const routes: Routes = [
   { path: 'search', component: Search },
   // --- RUTAS PARA TURISTAS (Protegidas por turistaGuard) ---
   { path: 'favoritos', component: Favoritos, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria', component: InicioCategoria, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle, canActivate: [turistaGuard] },
+  { path: 'inicio/categoria', component: InicioCategoria},
+  { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle},
   { path: 'prueba', component: Prueba, canActivate: [turistaGuard] },
   { path: 'comentario', component: Comentario, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle, canActivate: [turistaGuard] },
-  { path: 'sobreNosotros', component: SobreNosotros, canActivate: [turistaGuard] },
+  { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle},
+  { path: 'sobreNosotros', component: SobreNosotros},
   { path: 'inicio/perfil', component: Perfil, canActivate: [turistaGuard] },
   { path: 'misAprovaciones', component: MisAprovaciones, canActivate: [turistaGuard] },
-  { path: 'contactanos', component: Contactanos, canActivate: [turistaGuard] },
+  { path: 'contactanos', component: Contactanos},
   { path: 'solicitud', component: SolicitudLocal, canActivate: [turistaGuard] },
 
   // --- RUTAS PARA ADMINISTRADORES (Protegidas por adminGuard) ---
@@ -61,6 +63,7 @@ export const routes: Routes = [
   { path: 'panel-dueno', component: PantallaIncial, canActivate: [duenoGuard] },
   { path: 'panel-dueno/formulario-dueno', component: FormularioDueno, canActivate: [duenoGuard]},
   { path: 'panel-dueno/lugares', component: LugaresDueno, canActivate: [duenoGuard]},
+  { path: 'panel-dueno/perfil', component: PerfilComponent, canActivate: [duenoGuard]},
   
   // --- RUTA COMODÍN (Si escriben cualquier otra cosa) ---
   { path: '**', redirectTo: 'login' }

@@ -3,6 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatosService } from '../../service/serviceApp/service';
 import { Comentario } from '../comentario/comentario';
+import { AuthService } from '../../service/authService/auth-service';
 
 @Component({
   imports: [CommonModule, Comentario],
@@ -32,7 +33,7 @@ export class LocalDetalle implements OnInit {
   return 0;
 }
   localId = Number(this.route.snapshot.paramMap.get('id'));
-
+  public authService = inject(AuthService);
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));

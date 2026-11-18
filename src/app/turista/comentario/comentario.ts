@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ServiceComentario } from '../../service/serviceComentario/service-comentario';
+import { AuthService } from '../../service/authService/auth-service';
 
 @Component({
   imports: [CommonModule, ReactiveFormsModule],
@@ -35,6 +36,8 @@ export class Comentario implements OnInit {
   cargandoComentarios = signal<boolean>(true);
 
   estrellas = [1, 2, 3, 4, 5];
+
+  public authService = inject(AuthService);
 
   ngOnInit(): void {
   // Convertimos explícitamente a Number
