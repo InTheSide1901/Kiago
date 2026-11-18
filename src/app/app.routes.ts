@@ -52,7 +52,16 @@ const obtenerRutaPorRol = (): string => {
 export const routes: Routes = [
   // --- RUTAS PÚBLICAS (No requieren estar logueado) ---
   // { path: '', redirectTo: 'inicio/categoria', pathMatch: 'full' },
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+
+  { 
+    path: '', 
+    redirectTo: () => obtenerRutaPorRol(), 
+    pathMatch: 'full' 
+  },
+  // { path: '', redirectTo: 'login', pathMatch: 'full' }, fue remplazado con lo de arriba
+
+  
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'search', component: Search },
@@ -90,6 +99,9 @@ export const routes: Routes = [
   { path: 'panel-dueno/lugares', component: LugaresDueno, canActivate: [duenoGuard] },
   { path: 'panel-dueno/perfil', component: PerfilComponent, canActivate: [duenoGuard] },
 
-  // --- RUTA COMODÍN (Si escriben cualquier otra cosa) ---
-  { path: '**', redirectTo: 'login' }
+ // --- RUTA COMODÍN (Si escriben cualquier otra cosa) ---
+  { 
+    path: '**', 
+    redirectTo: () => obtenerRutaPorRol() 
+  }
 ];
