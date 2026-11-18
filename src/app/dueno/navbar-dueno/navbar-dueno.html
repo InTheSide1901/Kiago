@@ -1,34 +1,39 @@
-<nav class="bg-slate-900 text-white shadow-md">
+<nav class="bg-slate-900 text-white shadow-md sticky top-0 z-30">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
-      
-      <!-- Logo o Nombre de la App -->
-      <div class="flex items-center space-x-3">
-        <a routerLink="/inicio/categoria" class="text-xl font-bold tracking-wide text-white hover:text-emerald-400 transition">
-          Mi App KIAGO
+
+      <!-- Logo de la app + Navegación de escritorio -->
+      <div class="flex items-center space-x-6">
+        <a routerLink="/panel-dueno" (click)="cerrarMenu()" class="text-xl font-bold tracking-wide text-white hover:text-emerald-400 transition">
+          Mi App KIAGO <span class="text-xs text-emerald-400 font-normal bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800 ml-1">Dueño</span>
         </a>
+
+        <!-- Enlaces en pantallas grandes -->
+        <div class="hidden lg:flex items-center space-x-1">
+          @for (item of items; track item.path) {
+            <a
+              [routerLink]="item.path"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="px-3 py-1.5 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800 transition">
+              {{ item.label }}
+            </a>
+          }
+        </div>
       </div>
 
-      <!-- Estado de Autenticación / Acciones -->
-      <div class="flex items-center space-x-4">
-        
-        <!-- SI EL USUARIO ESTÁ LOGUEADO (Evaluamos la Signal) -->
-        @if (authService.currentUser()) {
-          <div class="flex items-center space-x-3">
-            <span class="text-sm font-medium text-gray-200">
-              Hola, <strong class="text-emerald-400">{{ authService.currentUser().nombre }}</strong>
-            </span>
-
-            <button 
-              (click)="onLogout()" 
-              class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-3 py-1.5 rounded-md transition shadow-sm">
-              Cerrar Sesión
-            </button>
-          </div>
-        } 
-        
-        <!-- SI EL USUARIO NO ESTÁ LOGUEADO -->
-        @else {
+      <!-- Estado de Autenticación (Escritorio) -->
+      <div class="hidden lg:flex items-center space-x-3">
+        @if (authService.currentUser(); as usuario) {
+          <span class="text-sm font-medium text-gray-200">
+            Hola, <strong class="text-emerald-400">{{ usuario.nombre }}</strong>
+          </span>
+          <button
+            (click)="onLogout()"
+            class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-3 py-1.5 rounded-md transition shadow-sm">
+            Cerrar Sesión
+          </button>
+        } @else {
           <div class="flex items-center space-x-2">
             <a 
               routerLink="/login" 
@@ -42,9 +47,64 @@
             </a>
           </div>
         }
-
       </div>
+
+      <!-- Botón Menú Móvil (Hamburguesa) -->
+      <button
+        type="button"
+        (click)="alternarMenu()"
+        class="lg:hidden p-2 rounded-md text-gray-300 hover:text-white hover:bg-slate-800 transition"
+        aria-label="Abrir menú"
+        [attr.aria-expanded]="menuAbierto()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
 
     </div>
   </div>
+
+  <!-- Menú Desplegable Móvil -->
+  @if (menuAbierto()) {
+    <div class="lg:hidden border-t border-slate-800 px-4 py-3 space-y-2 bg-slate-900">
+      @for (item of items; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="cerrarMenu()"
+          class="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-slate-800 transition">
+          {{ item.label }}
+        </a>
+      }
+
+      <div class="border-t border-slate-800 pt-2 mt-2">
+        @if (authService.currentUser(); as usuario) {
+          <div class="px-3 py-1 text-sm text-gray-200 mb-2">
+            Hola, <strong class="text-emerald-400">{{ usuario.nombre }}</strong>
+          </div>
+          <button
+            (click)="onLogout()"
+            class="w-full bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold px-3 py-2 rounded-md transition shadow-sm">
+            Cerrar Sesión
+          </button>
+        } @else {
+          <div class="flex flex-col space-y-2">
+            <a 
+              routerLink="/login" 
+              (click)="cerrarMenu()"
+              class="text-center text-gray-300 hover:text-white text-sm font-medium px-3 py-2 rounded-md hover:bg-slate-800 transition">
+              Iniciar Sesión
+            </a>
+            <a 
+              routerLink="/register" 
+              (click)="cerrarMenu()"
+              class="text-center bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-3 py-2 rounded-md transition shadow-sm">
+              Registrarse
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </nav>

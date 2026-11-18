@@ -23,6 +23,31 @@ import { Contactanos } from './turista/contactanos/contactanos';
 import { FormularioDueno } from './dueno/formulario-dueno/formulario-dueno';
 
 import { PerfilComponent } from './dueno/perfil/perfil';
+import { AuthService } from './service/authService/auth-service';
+import { inject } from '@angular/core';
+
+
+const obtenerRutaPorRol = (): string => {
+  const authService = inject(AuthService);
+  const usuario = authService.currentUser();
+
+  if (!usuario) {
+    return 'login';
+  }
+
+  // Asumiendo que el objeto usuario tiene una propiedad 'rol_id' o similar.
+  // Ajusta las condiciones según cómo guardes el rol (ej. usuario.rol_id o usuario.role)
+  switch (usuario.rol_id) { 
+    case 1:
+      return 'admin';          // Ruta inicial para Administrador
+    case 2:
+      return 'panel-dueno';    // Ruta inicial para Dueño
+    case 3:
+      return 'inicio/categoria'; // Ruta inicial para Turista
+    default:
+      return 'login';
+  }
+};
 
 export const routes: Routes = [
   // --- RUTAS PÚBLICAS (No requieren estar logueado) ---
@@ -33,15 +58,15 @@ export const routes: Routes = [
   { path: 'search', component: Search },
   // --- RUTAS PARA TURISTAS (Protegidas por turistaGuard) ---
   { path: 'favoritos', component: Favoritos, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria', component: InicioCategoria},
-  { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle},
+  { path: 'inicio/categoria', component: InicioCategoria },
+  { path: 'inicio/categoria/:id', component: InicioCategoriaDetalle },
   { path: 'prueba', component: Prueba, canActivate: [turistaGuard] },
   { path: 'comentario', component: Comentario, canActivate: [turistaGuard] },
-  { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle},
-  { path: 'sobreNosotros', component: SobreNosotros},
+  { path: 'inicio/categoria/:categoriaId/detalle/:id', component: LocalDetalle },
+  { path: 'sobreNosotros', component: SobreNosotros },
   { path: 'inicio/perfil', component: Perfil, canActivate: [turistaGuard] },
   { path: 'misAprovaciones', component: MisAprovaciones, canActivate: [turistaGuard] },
-  { path: 'contactanos', component: Contactanos},
+  { path: 'contactanos', component: Contactanos },
   { path: 'solicitud', component: SolicitudLocal, canActivate: [turistaGuard] },
 
   // --- RUTAS PARA ADMINISTRADORES (Protegidas por adminGuard) ---
@@ -61,10 +86,10 @@ export const routes: Routes = [
 
   // --- RUTAS PARA DUEÑOS (Futuro) ---
   { path: 'panel-dueno', component: PantallaIncial, canActivate: [duenoGuard] },
-  { path: 'panel-dueno/formulario-dueno', component: FormularioDueno, canActivate: [duenoGuard]},
-  { path: 'panel-dueno/lugares', component: LugaresDueno, canActivate: [duenoGuard]},
-  { path: 'panel-dueno/perfil', component: PerfilComponent, canActivate: [duenoGuard]},
-  
+  { path: 'panel-dueno/formulario-dueno', component: FormularioDueno, canActivate: [duenoGuard] },
+  { path: 'panel-dueno/lugares', component: LugaresDueno, canActivate: [duenoGuard] },
+  { path: 'panel-dueno/perfil', component: PerfilComponent, canActivate: [duenoGuard] },
+
   // --- RUTA COMODÍN (Si escriben cualquier otra cosa) ---
   { path: '**', redirectTo: 'login' }
 ];

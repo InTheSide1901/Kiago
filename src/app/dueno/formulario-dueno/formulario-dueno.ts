@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { ServiceSolicitudLocal } from '../../service/serviceSolicitudLocal/service-solicitud-local';
 import { AuthService } from '../../service/authService/auth-service'; // Ajusta la ruta a tu servicio de auth
+import { NavbarDueno } from '../navbar-dueno/navbar-dueno';
 
 export interface Categoria {
   id: number;
@@ -10,7 +11,7 @@ export interface Categoria {
   icono?: string;
 }
 @Component({
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,NavbarDueno],
   selector: 'app-formulario-dueno',
   styleUrl: './formulario-dueno.css',
   templateUrl: './formulario-dueno.html',

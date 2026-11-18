@@ -2,11 +2,12 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, FormsModule } from '@angular/forms';
 import { PerfilDueñoService } from '../services/service-perfil/perfil-service'; // Ajusta tu ruta de servicio
+import { NavbarDueno } from '../navbar-dueno/navbar-dueno';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule,NavbarDueno],
   templateUrl: './perfil.html',
   styleUrls: ['./perfil.css']
 })
