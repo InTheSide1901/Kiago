@@ -1,0 +1,231 @@
+<div class="min-h-screen bg-[#f8f9fc] p-4 sm:p-6 md:p-10 font-sans text-slate-800">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Encabezado -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div>
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Usuarios</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-2">Gestión de usuarios</h1>
+        <p class="text-slate-500 font-medium text-sm md:text-base">
+          Directorio, contactos y actividad de dueños y turistas.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2 text-xs font-semibold">
+        <span class="bg-indigo-50 text-indigo-700 border border-indigo-100 px-3 py-1.5 rounded-full">
+          Dueños: {{ totalDuenos() }}
+        </span>
+        <span class="bg-emerald-50 text-emerald-700 border border-emerald-100 px-3 py-1.5 rounded-full">
+          Turistas: {{ totalTuristas() }}
+        </span>
+      </div>
+    </header>
+
+    <!-- Filtros y buscador -->
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 mb-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-2 flex-wrap">
+        <button
+          type="button"
+          (click)="cambiarFiltroRol('todos')"
+          class="px-3.5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+          [class.bg-slate-900]="filtroRol() === 'todos'"
+          [class.text-white]="filtroRol() === 'todos'"
+          [class.bg-slate-100]="filtroRol() !== 'todos'"
+          [class.text-slate-600]="filtroRol() !== 'todos'"
+        >
+          Todos ({{ usuarios().length }})
+        </button>
+
+        <button
+          type="button"
+          (click)="cambiarFiltroRol('duenos')"
+          class="px-3.5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+          [class.bg-indigo-600]="filtroRol() === 'duenos'"
+          [class.text-white]="filtroRol() === 'duenos'"
+          [class.bg-indigo-50]="filtroRol() !== 'duenos'"
+          [class.text-indigo-700]="filtroRol() !== 'duenos'"
+        >
+          Dueños ({{ totalDuenos() }})
+        </button>
+
+        <button
+          type="button"
+          (click)="cambiarFiltroRol('turistas')"
+          class="px-3.5 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer"
+          [class.bg-emerald-600]="filtroRol() === 'turistas'"
+          [class.text-white]="filtroRol() === 'turistas'"
+          [class.bg-emerald-50]="filtroRol() !== 'turistas'"
+          [class.text-emerald-700]="filtroRol() !== 'turistas'"
+        >
+          Turistas ({{ totalTuristas() }})
+        </button>
+      </div>
+
+      <input
+        type="search"
+        [ngModel]="busqueda()"
+        (ngModelChange)="busqueda.set($event)"
+        placeholder="Buscar por nombre, correo o teléfono..."
+        class="w-full sm:w-80 px-4 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-800"
+      />
+    </div>
+
+    @if (cargando()) {
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-10 text-center text-slate-500 text-sm">
+        Cargando usuarios...
+      </div>
+    } @else if (error()) {
+      <div class="bg-rose-50 border border-rose-100 rounded-2xl p-6 text-center text-rose-700 text-sm font-medium">
+        {{ error() }}
+      </div>
+    } @else {
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-slate-50/60">
+                <th class="py-3.5 px-5">Usuario</th>
+                <th class="py-3.5 px-4">Rol</th>
+                <th class="py-3.5 px-4">Contacto</th>
+                <th class="py-3.5 px-4">Actividad</th>
+                <th class="py-3.5 px-4">Registro</th>
+                <th class="py-3.5 px-5 text-right">Detalle</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              @for (u of usuariosFiltrados(); track u.id) {
+                <tr class="hover:bg-slate-50/70 transition-colors">
+                  <td class="py-4 px-5">
+                    <div class="flex items-center gap-3">
+                      <img
+                        [src]="avatarUrl(u.foto_perfil)"
+                        [alt]="u.nombre"
+                        class="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0"
+                      />
+                      <div class="min-w-0">
+                        <p class="font-semibold text-slate-900 truncate">{{ u.nombre }} {{ u.apellido }}</p>
+                        <p class="text-xs text-slate-400 truncate">{{ u.email }}</p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td class="py-4 px-4">
+                    <span
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
+                      [class.bg-indigo-50]="u.rol_id === 2"
+                      [class.text-indigo-700]="u.rol_id === 2"
+                      [class.bg-emerald-50]="u.rol_id === 3"
+                      [class.text-emerald-700]="u.rol_id === 3"
+                    >
+                      {{ u.rol_nombre }}
+                    </span>
+                  </td>
+
+                  <td class="py-4 px-4 text-xs text-slate-600">
+                    {{ u.telefono || 'Sin teléfono' }}
+                  </td>
+
+                  <td class="py-4 px-4 text-xs text-slate-700">
+                    @if (u.rol_id === 2) {
+                      <span class="font-semibold">{{ u.total_locales }}</span> locales publicados
+                    } @else {
+                      <span class="font-semibold">{{ u.total_resenas }}</span> reseñas publicadas
+                    }
+                  </td>
+
+                  <td class="py-4 px-4 text-xs text-slate-400 whitespace-nowrap">
+                    {{ u.created_at | date: 'dd/MM/yyyy' }}
+                  </td>
+
+                  <td class="py-4 px-5 text-right">
+                    <button
+                      type="button"
+                      (click)="verDetalle(u)"
+                      class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+                    >
+                      Ver actividad
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="py-10 text-center text-slate-400 text-sm">
+                    No se encontraron usuarios con ese filtro.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel de detalle del usuario seleccionado -->
+      @if (usuarioSeleccionado(); as sel) {
+        <div class="mt-6 bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <div class="flex items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <div>
+              <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Actividad del usuario</p>
+              <h2 class="text-lg font-bold text-slate-900">
+                {{ sel.nombre }} {{ sel.apellido }} · <span class="text-sm font-medium text-slate-500">{{ sel.rol_nombre }}</span>
+              </h2>
+            </div>
+            <button
+              type="button"
+              (click)="cerrarDetalle()"
+              class="px-3 py-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl cursor-pointer"
+            >
+              Cerrar
+            </button>
+          </div>
+
+          @if (cargandoDetalle()) {
+            <p class="py-6 text-sm text-slate-400">Cargando actividad...</p>
+          } @else if (detalleSeleccionado(); as det) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                  Locales ({{ det.locales.length }})
+                </h3>
+                <ul class="divide-y divide-slate-100 text-sm">
+                  @for (loc of det.locales; track loc.id) {
+                    <li class="py-2.5 flex justify-between gap-2">
+                      <div>
+                        <p class="font-semibold text-slate-800">{{ loc.nombre }}</p>
+                        <p class="text-xs text-slate-400">{{ loc.categoria }} · {{ loc.direccion }}</p>
+                      </div>
+                      <span class="text-xs text-slate-400 shrink-0">{{ loc.created_at | date: 'dd/MM/yyyy' }}</span>
+                    </li>
+                  } @empty {
+                    <li class="py-3 text-xs text-slate-400">Sin locales registrados.</li>
+                  }
+                </ul>
+              </div>
+
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">
+                  Solicitudes de local ({{ det.solicitudes.length }})
+                </h3>
+                <ul class="divide-y divide-slate-100 text-sm">
+                  @for (sol of det.solicitudes; track sol.id) {
+                    <li class="py-2.5 flex items-center justify-between gap-2">
+                      <div>
+                        <p class="font-semibold text-slate-800">{{ sol.nombre }}</p>
+                        <p class="text-xs text-slate-400">{{ sol.categoria }}</p>
+                      </div>
+                      <span class="text-xs font-bold uppercase px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 shrink-0">
+                        {{ sol.estado }}
+                      </span>
+                    </li>
+                  } @empty {
+                    <li class="py-3 text-xs text-slate-400">Sin solicitudes registradas.</li>
+                  }
+                </ul>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+
+  </div>
+</div>

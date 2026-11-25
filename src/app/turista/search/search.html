@@ -3,8 +3,7 @@
     <div class="items-center justify-center text-center">
       <h1 class="font-bold text-4xl sm:text-5xl">Encuentra tu próximo destino</h1>
     </div>
-    <!-- Se agrega (submit)="$event.preventDefault()" para evitar que la página recargue al dar Enter -->
-    <!-- 1. Cambiamos el submit para que ejecute aplicarFiltros() -->
+
     <form class="max-w-3xl mx-auto w-full px-4 my-7 pb-7" (ngSubmit)="aplicarFiltros()">
       <label for="search" class="sr-only">Search</label>
       <div class="relative flex items-center">
@@ -26,7 +25,6 @@
           </svg>
         </div>
 
-        <!-- 2. Quitamos el (input)="aplicarFiltros()" de aquí -->
         <input
           type="search"
           id="search"
@@ -34,7 +32,6 @@
           [(ngModel)]="busqueda"
           class="block w-full py-3.5 ps-11 pe-28 text-base text-gray-700 bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-[#2e5d32] focus:border-transparent placeholder:text-gray-400 shadow-sm"
           placeholder="Buscar museos, ciudades, gastronomía..."
-          required
         />
 
         <button
@@ -53,70 +50,72 @@
            ================================ -->
       <aside class="w-full lg:w-1/4 flex-shrink-0">
         <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm sticky top-4">
-          <h3 class="font-bold text-lg text-[#0b1329] mb-4">Filtros populares</h3>
+          <div class="flex items-center justify-between mb-4 gap-2">
+            <h3 class="font-bold text-lg text-[#0b1329]">Filtros populares</h3>
 
-          <!-- Grupo de Filtros 1 -->
+            @if (hayFiltrosActivos) {
+              <button
+                type="button"
+                (click)="limpiarFiltros()"
+                class="text-xs font-semibold text-[#2e5d32] hover:text-[#1e3f21] underline cursor-pointer shrink-0"
+              >
+                Limpiar filtros
+              </button>
+            }
+          </div>
+
+          <!-- Categorías desde la BD (selección única) -->
           <div class="space-y-3">
-            <label class="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                (change)="toggleCategoria('Gastronomia', $event)"
-                class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
-              />
-              <span class="text-sm text-gray-700">Gastronomia</span>
-            </label>
-            <label class="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                (change)="toggleCategoria('Parques', $event)"
-                class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
-              />
-              <span class="text-sm text-gray-700">Parques</span>
-            </label>
-            <label class="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                (change)="toggleCategoria('Alojamientos', $event)"
-                class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
-              />
-              <span class="text-sm text-gray-700">Alojamientos</span>
-            </label>
-            <label class="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                (change)="toggleCategoria('Museos', $event)"
-                class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
-              />
-              <span class="text-sm text-gray-700">Museos</span>
-            </label>
-            <label class="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                (change)="toggleCategoria('Eventos', $event)"
-                class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
-              />
-              <span class="text-sm text-gray-700">Eventos</span>
-            </label>
+            @for (cat of categoriasDisponibles; track cat.id) {
+              <label class="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  [checked]="estaCategoriaSeleccionada(cat.nombre)"
+                  (change)="toggleCategoria(cat.nombre, $event)"
+                  class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
+                />
+                <span class="text-sm text-gray-700">{{ cat.nombre }}</span>
+              </label>
+            } @empty {
+              <p class="text-xs text-gray-400">No hay categorías cargadas.</p>
+            }
           </div>
 
           <hr class="my-6 border-gray-200" />
 
-          <!-- Grupo de Filtros 2 -->
+          <!-- Filtro de Puntuación -->
           <h3 class="font-bold text-lg text-[#0b1329] mb-4">Puntuación</h3>
           <div class="space-y-3">
             <label class="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
+                [checked]="estaPuntuacionSeleccionada(4.5)"
+                (change)="togglePuntuacion(4.5, $event)"
                 class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
               />
-              <span class="text-sm text-gray-700">Excelente: 4.5 o más</span>
+              <span class="text-sm text-gray-700">
+                ⭐ 4.5 o más <span class="text-xs text-gray-400">(Excelente)</span>
+              </span>
             </label>
             <label class="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
+                [checked]="estaPuntuacionSeleccionada(4)"
+                (change)="togglePuntuacion(4, $event)"
                 class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
               />
-              <span class="text-sm text-gray-700">Muy bueno: 4 o más</span>
+              <span class="text-sm text-gray-700">
+                ⭐ 4.0 o más <span class="text-xs text-gray-400">(Muy bueno)</span>
+              </span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                [checked]="estaPuntuacionSeleccionada(3)"
+                (change)="togglePuntuacion(3, $event)"
+                class="cursor-pointer w-5 h-5 rounded border-gray-300 text-[#5cb85c] focus:ring-[#5cb85c]"
+              />
+              <span class="text-sm text-gray-700">⭐ 3.0 o más</span>
             </label>
           </div>
         </div>
@@ -126,32 +125,38 @@
            ÁREA DE RESULTADOS 
            ================================ -->
       <section class="w-full lg:w-3/4">
-        <!-- Encabezado de resultados -->
-        <div class="flex items-center justify-between mb-6">
-          <!-- Actualizado para mostrar la cantidad de filtrados -->
+        <div class="flex items-center justify-between mb-6 gap-4">
           <h2 class="text-xl font-bold text-[#0b1329]">
             Resultados ({{ lugaresFiltrados.length }})
           </h2>
+
+          @if (hayFiltrosActivos) {
+            <button
+              type="button"
+              (click)="limpiarFiltros()"
+              class="px-3.5 py-1.5 text-xs font-semibold text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 rounded-xl transition-colors cursor-pointer"
+            >
+              Limpiar filtros
+            </button>
+          }
         </div>
 
-        <!-- Grilla de Tarjetas -->
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <!-- Actualizado para iterar sobre lugaresFiltrados y aplicando el paginado si lo deseas -->
           @for (lugar of lugaresFiltrados; track lugar.id) {
             <div
               class="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition overflow-hidden flex flex-col"
             >
               <img
-                src="{{ lugar.imagenUrl }}"
-                alt="Lugar"
+                [src]="lugar.imagen_principal"
+                [alt]="lugar.nombre || 'Lugar'"
                 class="w-full h-48 object-cover bg-gray-100"
               />
 
               <div class="p-5 flex-1 flex flex-col">
-                <div class="flex justify-between items-start mb-2">
+                <div class="flex justify-between items-start gap-2 mb-2">
                   <h3 class="text-lg font-bold text-[#0b1329]">{{ lugar.nombre }}</h3>
                   <span
-                    class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded text-center"
+                    class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded text-center shrink-0"
                   >
                     {{ lugar.categoria }}
                   </span>
@@ -161,13 +166,25 @@
                   {{ lugar.descripcion }}
                 </p>
 
-                <div
-                  class="flex items-center justify-between mt-auto"
-                  [routerLink]="['/inicio/categoria', lugar.categoria_id, 'detalle', lugar.id]"
-                >
-                  <span class="text-sm font-medium text-gray-700">⭐ 4.5</span>
+                <div class="flex items-center justify-between mt-auto gap-2 pt-2 border-t border-gray-100">
+                  <div class="flex flex-col">
+                    <span class="text-sm font-medium text-gray-700">
+                      @if ((lugar.total_resenas ?? 0) > 0) {
+                        ⭐ {{ lugar.promedio_calificacion | number: '1.1-1' }}
+                        <span class="text-xs text-gray-400">({{ lugar.total_resenas }})</span>
+                      } @else {
+                        ☆ Sin reseñas
+                      }
+                    </span>
+                    <span class="text-xs text-gray-500">
+                      Servicio: {{ lugar.tipoServicioRegistrado || lugar.categoria }}
+                    </span>
+                  </div>
+
                   <button
-                    class="px-4 py-2 bg-[#5cb85c] hover:bg-[#479E47] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                    type="button"
+                    [routerLink]="['/inicio/categoria', lugar.categoria_id, 'detalle', lugar.id]"
+                    class="px-4 py-2 bg-[#5cb85c] hover:bg-[#479E47] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer shrink-0"
                   >
                     Ver detalle
                   </button>
@@ -176,9 +193,18 @@
             </div>
           } @empty {
             <div
-              class="col-span-full text-center py-10 text-gray-500 bg-white rounded-2xl border border-gray-200"
+              class="col-span-full text-center py-10 px-4 text-gray-500 bg-white rounded-2xl border border-gray-200 space-y-3"
             >
-              No se encontraron lugares disponibles.
+              <p>No se encontraron lugares disponibles con esos filtros.</p>
+              @if (hayFiltrosActivos) {
+                <button
+                  type="button"
+                  (click)="limpiarFiltros()"
+                  class="px-4 py-2 bg-[#2e5d32] hover:bg-[#234827] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                >
+                  Limpiar filtros
+                </button>
+              }
             </div>
           }
         </div>

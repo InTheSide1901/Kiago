@@ -1,7 +1,9 @@
-<app-header *ngIf="mostrarLayout"></app-header>
+<div class="min-h-screen flex flex-col">
+  <app-header *ngIf="mostrarLayout"></app-header>
 
-<main>
+  <main class="flex-1">
     <router-outlet (activate)="initializeFlowbite()"></router-outlet>
-</main>
+  </main>
 
-<app-footer *ngIf="mostrarLayout"></app-footer>
+  <app-footer *ngIf="mostrarLayout"></app-footer>
+</div>

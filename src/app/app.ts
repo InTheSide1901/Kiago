@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { initFlowbite } from 'flowbite';
-import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { Router, NavigationEnd, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Header } from './turista/header/header';
@@ -8,7 +8,7 @@ import { Footer } from './turista/footer/footer';
 import { AuthService } from './service/authService/auth-service'; // Asegúrate de que esta ruta sea correcta
 
 @Component({
-  imports: [RouterOutlet, CommonModule, Header, Footer],
+  imports: [RouterOutlet, CommonModule, Header, Footer, RouterLinkActive],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
